@@ -1,0 +1,12 @@
+The component can take an optional 'pattern' string prop like: 'Days {d} Hours {hh} Minutes {mm} Seconds {SS} Millis {sss}'.
+
+The component can also take a number of children. These could be:
+ - Any element really that we can stick in our input area.
+ - DurationControlUnit nodes.
+
+ The presence of having any child nodes will override the pattern.
+
+ The DurationControlUnit acts as a pattern for one unit (day/hour/minute/second/milli) where the input is '{v}' (or '{vvv}' for 000)
+ The DurationControlUnit will have props to handle input focus at the unit level and apply a style to the unit?
+
+ Will the value be stored as seconds or an object with properties for each unit?
