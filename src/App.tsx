@@ -14,7 +14,9 @@ function App() {
   return (
     <div className="App">
       <p>DurationControl</p>
-      <DurationControl pattern='Days {d} Hours {hh} Minutes {mm} Seconds {SS} Millis {sss}' />
+      <DurationControl 
+        pattern='Days {d} Hours {hh} Minutes {mm} Seconds {SS} Millis {sss}'
+        value={4} />
       <br/>
 
       <p>React-Duration</p>

@@ -1,4 +1,7 @@
-The component can take an optional 'pattern' string prop like: 'Days {d} Hours {hh} Minutes {mm} Seconds {SS} Millis {sss}'.
+The component can take an optional 'pattern' string prop like:  'Days {d} Hours {hh} Minutes {mm} Seconds {SS} Millis {sss}'.
+This would show as Days [0] Hours [00] Minutes [00] Seconds [00] Millis [000] where the input maxLength matches and the digits values are always padded with 0.
+See: https://www.jqueryscript.net/demo/accessible-duration-picker/
+Others: https://www.jqueryscript.net/tags.php?/Duration%20Picker/
 
 The component can also take a number of children. These could be:
  - Any element really that we can stick in our input area.
@@ -10,3 +13,11 @@ The component can also take a number of children. These could be:
  The DurationControlUnit will have props to handle input focus at the unit level and apply a style to the unit?
 
  Will the value be stored as seconds or an object with properties for each unit?
+
+ Do we want both controlled and uncontrolled? Probably just controlled with a 'value' and 'onChange' prop.
+
+ inputs have maxLength
+
+ If an input is empty it should show a default value of 0
+
+ Should have a prop for amount to increment per unit on arrow click or up/down press.
