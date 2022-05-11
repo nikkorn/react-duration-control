@@ -16,7 +16,8 @@ The component can also take a number of children. These could be:
 
  Do we want both controlled and uncontrolled? Probably just controlled with a 'value' and 'onChange' prop.
 
- inputs have maxLength
+ inputs have maxLength to limit number of digits but css width has to be applied to restrict actual input width. 8px per digit seems like a good starting point.
+ Would be good to look into having inputs stretch to fit their content.
 
  If an input is empty it should show a default value of 0
 
