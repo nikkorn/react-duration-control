@@ -1,0 +1,10 @@
+.react-duration-control {
+    display: inline-block;
+}
+
+.react-duration-control > .control-wrapper {
+    display: flex;
+    flex-direction: row;
+    padding: 2px;
+    border: 1px gray solid;
+}
