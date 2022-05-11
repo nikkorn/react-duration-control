@@ -16,7 +16,8 @@ function App() {
       <p>DurationControl</p>
       <DurationControl 
         pattern='Days {d} Hours {hh} Minutes {mm} Seconds {SS} Millis {sss}'
-        value={4} />
+        value={value}
+        onChange={(val) => { setValue(val); console.log(val); }}/>
       <br/>
 
       <p>React-Duration</p>

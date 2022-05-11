@@ -4,13 +4,22 @@ import { DurationControlUnit, DurationControlUnitProps } from "./DurationControl
 import { Spinner } from "./Spinner";
 
 import "./DurationControl.css";
+import { DurationControlInlineText } from "./DurationControlInlineText";
 
+/**
+ * The DurationControl component props.
+ */
 export type DurationControlProps = React.PropsWithChildren<{
     pattern: string; 
 
 	value: number;
+
+	onChange: (value: number) => void;
 }>;
 
+/**
+ * The DurationControl component state.
+ */
 export type DurationControlState = {
     value: number; 
 };
@@ -52,9 +61,9 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
             <div className="react-duration-control">
                 <div className="control-wrapper">
                     <div className="elements-container">
-						<span style={{ whiteSpace: "pre" }}>Hours </span>
+						<DurationControlInlineText value="Hrs "/>
 						<input style={{ width: "3em" }} type="text" maxLength={3} value={this.state.value} onChange={(event) => this.setState({ value: parseInt(event.target.value) })} />
-						<span style={{ whiteSpace: "pre" }}> Minutes </span>
+						<DurationControlInlineText value=" Mns "/>
 						<input type="text" maxLength={3} value={this.state.value} onChange={(event) => this.setState({ value: parseInt(event.target.value) })} />
                     </div>
                     <Spinner />

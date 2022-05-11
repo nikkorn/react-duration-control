@@ -20,17 +20,12 @@ export type DurationControlUnitProps = {
  * The DurationControlUnit component.
  */
 export const DurationControlUnit: React.FunctionComponent<DurationControlUnitProps> = ({ type, characterLength }) => {
-
-    /** The input styles. */
-    const inputStyles: React.CSSProperties = {
-        display: "flex",
-	    flexDirection: "row",
-        padding: "2px"
-    };
-
     return (
         <div className={`duration-control-unit ${type}`}>
-            <input style={inputStyles} className={`duration-control-unit-input ${type}`}></input>
+            <input 
+                className={`duration-control-unit-input ${type}`} 
+                maxLength={characterLength}>
+            </input>
         </div>
     );
 };
