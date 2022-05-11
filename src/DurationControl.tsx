@@ -62,9 +62,9 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
                 <div className="control-wrapper">
                     <div className="elements-container">
 						<DurationControlInlineText value="Hrs "/>
-						<input style={{ width: "3em" }} type="text" maxLength={3} value={this.state.value} onChange={(event) => this.setState({ value: parseInt(event.target.value) })} />
+						<DurationControlUnit type="hour" characterLength={3} value={this.state.value} onChange={(value) => this.setState({ value })}></DurationControlUnit>
 						<DurationControlInlineText value=" Mns "/>
-						<input type="text" maxLength={3} value={this.state.value} onChange={(event) => this.setState({ value: parseInt(event.target.value) })} />
+						<DurationControlUnit type="minute" characterLength={3} value={this.state.value} onChange={(value) => this.setState({ value })}></DurationControlUnit>
                     </div>
                     <Spinner />
                 </div>

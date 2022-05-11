@@ -14,17 +14,25 @@ export type DurationControlUnitProps = {
 
     /** The character length of the unit input. */
     characterLength: number;
+
+    value: number;
+
+	onChange: (value: number) => void;
 };
 
 /**
  * The DurationControlUnit component.
  */
-export const DurationControlUnit: React.FunctionComponent<DurationControlUnitProps> = ({ type, characterLength }) => {
+export const DurationControlUnit: React.FunctionComponent<DurationControlUnitProps> = ({ value, onChange, type, characterLength }) => {
     return (
         <div className={`duration-control-unit ${type}`}>
-            <input 
+            <input
+                type="text"
+                value={value}
+                onChange={(event) => onChange(parseInt(event.target.value))}
                 className={`duration-control-unit-input ${type}`} 
-                maxLength={characterLength}>
+                maxLength={characterLength}
+                size={characterLength}>
             </input>
         </div>
     );
