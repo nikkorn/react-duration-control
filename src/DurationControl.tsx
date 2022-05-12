@@ -11,7 +11,7 @@ type DurationControlUnitValues = { [key in DurationUnitType]?: number };
 type DurationControlUnit = {
 	type: DurationUnitType;
 	characters: number;
-	value: number;
+	value: number | null;
 };
 
 type DurationControlElement = DurationControlUnit | string;
@@ -90,7 +90,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
         );
 	}
 
-	private _onUnitValueChange(type: DurationUnitType, value: number): void {
+	private _onUnitValueChange(type: DurationUnitType, value: number | null): void {
 		console.log("VALUE: " + value);		
 		const elements = this.state.elements.slice();
 		const unitElement = elements.find((element) => typeof element !== "string" && element.type === type) as DurationControlUnit;
@@ -108,7 +108,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		const secondUnitRegex = /^{(s+)}$/g;
 		const millisecondUnitRegex = /^{(f+)}$/g;
 
-		return pattern
+		const elements = pattern
 			.split(patternRegex)
 			.reduce<DurationControlElement[]>((previous, current) => {
 				if (!current) {
@@ -129,6 +129,11 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 			
 				return [...previous, current]; 
 			}, []);
+
+			// TODO Double check that we don't have duplicate unit types.
+			// ["day","hour","minute","second","millisecond"].forEach((unit) => {});
+
+		return elements;
 	}
 
 	private static _convertMillisToUnitValues(millis: number): DurationControlUnitValues {

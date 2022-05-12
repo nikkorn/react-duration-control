@@ -15,9 +15,9 @@ export type DurationControlUnitInputProps = {
     /** The character length of the unit input. */
     characterLength: number;
 
-    value: number;
+    value: number | null;
 
-	onChange: (value: number) => void;
+	onChange: (value: number | null) => void;
 };
 
 /**
@@ -28,15 +28,27 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
         <div className={`duration-control-unit-input-wrapper ${type}`}>
             <input
                 type="text"
-                value={value}
+                value={value === null ? "" : value}
                 onChange={(event) => {
-                    const intValue = parseInt(event.target.value);
-
-                    if (isNaN(intValue)) {
+                    // If our input is empty then the input value should be null.
+                    if (!event.target.value) {
+                        onChange(null);
                         return;
                     }
 
-                    onChange(intValue)
+                    // Parse the input value as an integer.
+                    const intValue = parseInt(event.target.value, 10);
+
+                    // On;y call our 'onChange' callback if our value is actually a valid number.
+                    if (!isNaN(intValue)) {
+                        onChange(intValue);
+                    }
+                }}
+                onBlur={(event) => {
+                    // If focus leaves our input and it is empty then we should reset the input value to zero.
+                    if (!event.target.value) {
+                        onChange(0);
+                    }
                 }}
                 className={`duration-control-unit-input ${type}`} 
                 maxLength={characterLength}
