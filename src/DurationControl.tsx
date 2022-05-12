@@ -2,7 +2,7 @@ import * as React from "react";
 
 import "./DurationControl.css";
 
-import { DurationControlUnitInput, DurationUnitType } from "./DurationControlUnit";
+import { DurationControlUnitInput, DurationUnitType } from "./DurationControlUnitInput";
 import { DurationControlInlineText } from "./DurationControlInlineText";
 import { Spinner } from "./Spinner";
 
@@ -48,8 +48,10 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 
 		// Set the initial state for the component.
 		this.state = {
-			elements: this._parseElementsFromPattern(props.pattern)
+			elements: DurationControl._parseElementsFromPattern(props.pattern)
 		};
+
+		this._onUnitValueChange = this._onUnitValueChange.bind(this);
 	}
 
 	/**
@@ -78,7 +80,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 							typeof element === "string" ? (
 								<DurationControlInlineText value={element} />
 							) : (
-								<DurationControlUnitInput type={element.type} characterLength={element.characters} value={element.value} onChange={(value) => console.log(value)}></DurationControlUnitInput>
+								<DurationControlUnitInput type={element.type} characterLength={element.characters} value={element.value} onChange={(value) => this._onUnitValueChange(element.type, value)}></DurationControlUnitInput>
 							)
 						)))}
                     </div>
@@ -88,7 +90,17 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
         );
 	}
 
-	private _parseElementsFromPattern(pattern: string): DurationControlElement[] {
+	private _onUnitValueChange(type: DurationUnitType, value: number): void {
+		console.log("VALUE: " + value);		
+		const elements = this.state.elements.slice();
+		const unitElement = elements.find((element) => typeof element !== "string" && element.type === type) as DurationControlUnit;
+		if (unitElement.value !== value) {
+			unitElement.value = value;
+			this.setState({ elements })
+		}
+	}
+
+	private static _parseElementsFromPattern(pattern: string): DurationControlElement[] {
 		const patternRegex = /(\{d+\}|\{h+\}|\{m+\}|\{s+\}|\{f+\})/g;
 		const dayUnitRegex = /^{(d+)}$/g;
 		const hourUnitRegex = /^{(h+)}$/g;
@@ -119,7 +131,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 			}, []);
 	}
 
-	private _convertMillisToUnitValues(millis: number): DurationControlUnitValues {
+	private static _convertMillisToUnitValues(millis: number): DurationControlUnitValues {
 		// TODO Should this take the units that are includeed as part of the pattern?
 		// There is no reason to convert our millis to values for units that we are not even showing inputs for.
 

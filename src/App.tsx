@@ -5,7 +5,7 @@ import './App.css';
 import DurationInput from 'react-duration';
 import { TimeDurationInput } from 'react-time-duration-input';
 import { DurationControl } from './DurationControl';
-import { DurationControlUnitInput } from './DurationControlUnit';
+import { DurationControlUnitInput } from './DurationControlUnitInput';
 
 function App() {
   const [ value, setValue ] = useState(61);

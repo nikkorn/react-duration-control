@@ -29,7 +29,15 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
             <input
                 type="text"
                 value={value}
-                onChange={(event) => onChange(parseInt(event.target.value))}
+                onChange={(event) => {
+                    const intValue = parseInt(event.target.value);
+
+                    if (isNaN(intValue)) {
+                        return;
+                    }
+
+                    onChange(intValue)
+                }}
                 className={`duration-control-unit-input ${type}`} 
                 maxLength={characterLength}
                 size={characterLength}>
