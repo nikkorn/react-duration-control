@@ -8,6 +8,7 @@
     justify-content: space-between;
     padding: 3px;
     border: 1px gray solid;
+    border-radius: 3px;
 }
 
 .react-duration-control > .control-wrapper > .elements-container {

@@ -1,10 +1,15 @@
 import * as React from "react";
 
-import { DurationControlUnit, DurationControlUnitProps } from "./DurationControlUnit";
+import "./DurationControl.css";
+
+import { DurationControlUnit, DurationControlUnitProps, DurationUnitType } from "./DurationControlUnit";
+import { DurationControlInlineText } from "./DurationControlInlineText";
 import { Spinner } from "./Spinner";
 
-import "./DurationControl.css";
-import { DurationControlInlineText } from "./DurationControlInlineText";
+/**
+ * The duration control unit values type.
+ */
+type DurationControlUnitValues = { [key in DurationUnitType]?: number }; 
 
 /**
  * The DurationControl component props.
@@ -21,7 +26,8 @@ export type DurationControlProps = React.PropsWithChildren<{
  * The DurationControl component state.
  */
 export type DurationControlState = {
-    value: number; 
+	/** The duration control unit values. */
+    values: DurationControlUnitValues;
 };
 
 /**
@@ -36,7 +42,11 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		super(props);
 
 		// Set the initial state for the component.
-		this.state = { value: props.value };
+		// TODO Should the statue include info about the parsed pattern?????
+		// e.g. this.state = { units:[{ unit:"hour", value: 0}] }
+		this.state = {
+			values: this._convertMillisToUnitValues(this.props.value || 0)
+		};
 	}
 
 	/**
@@ -70,5 +80,18 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
                 </div>
             </div>
         );
+	}
+
+	private _convertMillisToUnitValues(millis: number): DurationControlUnitValues {
+		// TODO Should this take the units that are includeed as part of the pattern?
+		// There is no reason to convert our millis to values for units that we are not even showing inputs for.
+
+		return  {
+			day: 0,
+			hour: 0,
+			minute: 0,
+			second: 0,
+			millisecond: 0
+		};
 	}
 }
