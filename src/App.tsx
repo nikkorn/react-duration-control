@@ -5,7 +5,7 @@ import './App.css';
 import DurationInput from 'react-duration';
 import { TimeDurationInput } from 'react-time-duration-input';
 import { DurationControl } from './DurationControl';
-import { DurationControlUnit } from './DurationControlUnit';
+import { DurationControlUnitInput } from './DurationControlUnit';
 
 function App() {
   const [ value, setValue ] = useState(61);
@@ -15,7 +15,7 @@ function App() {
     <div className="App">
       <p>DurationControl</p>
       <DurationControl 
-        pattern='Days {d} Hours {hh} Minutes {mm} Seconds {SS} Millis {sss}'
+        pattern='Days {d} Hours {hh} Minutes {mm} Seconds {s} Millis {sss}'
         value={value}
         onChange={(val) => { setValue(val); console.log(val); }}/>
       <br/>

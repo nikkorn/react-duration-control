@@ -6,9 +6,9 @@ import * as React from "react";
 export type DurationUnitType = "day" | "hour" | "minute" | "second" | "millisecond";
 
 /**
- * The DurationControlUnit component props.
+ * The DurationControlUnitInput component props.
  */
-export type DurationControlUnitProps = {
+export type DurationControlUnitInputProps = {
     /** The unit type. */
     type: DurationUnitType;
 
@@ -21,11 +21,11 @@ export type DurationControlUnitProps = {
 };
 
 /**
- * The DurationControlUnit component.
+ * The DurationControlUnitInput component.
  */
-export const DurationControlUnit: React.FunctionComponent<DurationControlUnitProps> = ({ value, onChange, type, characterLength }) => {
+export const DurationControlUnitInput: React.FunctionComponent<DurationControlUnitInputProps> = ({ value, onChange, type, characterLength }) => {
     return (
-        <div className={`duration-control-unit ${type}`}>
+        <div className={`duration-control-unit-input-wrapper ${type}`}>
             <input
                 type="text"
                 value={value}

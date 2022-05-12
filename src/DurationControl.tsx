@@ -2,32 +2,37 @@ import * as React from "react";
 
 import "./DurationControl.css";
 
-import { DurationControlUnit, DurationControlUnitProps, DurationUnitType } from "./DurationControlUnit";
+import { DurationControlUnitInput, DurationUnitType } from "./DurationControlUnit";
 import { DurationControlInlineText } from "./DurationControlInlineText";
 import { Spinner } from "./Spinner";
 
-/**
- * The duration control unit values type.
- */
 type DurationControlUnitValues = { [key in DurationUnitType]?: number }; 
+
+type DurationControlUnit = {
+	type: DurationUnitType;
+	characters: number;
+	value: number;
+};
+
+type DurationControlElement = DurationControlUnit | string;
 
 /**
  * The DurationControl component props.
  */
-export type DurationControlProps = React.PropsWithChildren<{
+export type DurationControlProps = {
     pattern: string; 
 
 	value: number;
 
 	onChange: (value: number) => void;
-}>;
+};
 
 /**
  * The DurationControl component state.
  */
 export type DurationControlState = {
-	/** The duration control unit values. */
-    values: DurationControlUnitValues;
+	/** The duration control elements. */
+    elements: DurationControlElement[];
 };
 
 /**
@@ -42,10 +47,8 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		super(props);
 
 		// Set the initial state for the component.
-		// TODO Should the statue include info about the parsed pattern?????
-		// e.g. this.state = { units:[{ unit:"hour", value: 0}] }
 		this.state = {
-			values: this._convertMillisToUnitValues(this.props.value || 0)
+			elements: this._parseElementsFromPattern(props.pattern)
 		};
 	}
 
@@ -71,15 +74,49 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
             <div className="react-duration-control">
                 <div className="control-wrapper">
                     <div className="elements-container">
-						<DurationControlInlineText value="Hrs "/>
-						<DurationControlUnit type="hour" characterLength={3} value={this.state.value} onChange={(value) => this.setState({ value })}></DurationControlUnit>
-						<DurationControlInlineText value=" Mns "/>
-						<DurationControlUnit type="minute" characterLength={3} value={this.state.value} onChange={(value) => this.setState({ value })}></DurationControlUnit>
+						{this.state.elements.map((element => (
+							typeof element === "string" ? (
+								<DurationControlInlineText value={element} />
+							) : (
+								<DurationControlUnitInput type={element.type} characterLength={element.characters} value={element.value} onChange={(value) => console.log(value)}></DurationControlUnitInput>
+							)
+						)))}
                     </div>
                     <Spinner />
                 </div>
             </div>
         );
+	}
+
+	private _parseElementsFromPattern(pattern: string): DurationControlElement[] {
+		const patternRegex = /(\{d+\}|\{h+\}|\{m+\}|\{s+\}|\{f+\})/g;
+		const dayUnitRegex = /^{(d+)}$/g;
+		const hourUnitRegex = /^{(h+)}$/g;
+		const minuteUnitRegex = /^{(m+)}$/g;
+		const secondUnitRegex = /^{(s+)}$/g;
+		const millisecondUnitRegex = /^{(f+)}$/g;
+
+		return pattern
+			.split(patternRegex)
+			.reduce<DurationControlElement[]>((previous, current) => {
+				if (!current) {
+					return previous;
+				}
+			
+				if ((current).match(dayUnitRegex)) {
+					return [...previous, { type: "day", characters: current.length - 2, value: 0 }]; 
+				} else if ((current).match(hourUnitRegex)) {
+					return [...previous, { type: "hour", characters: current.length - 2, value: 0 }]; 
+				} else if ((current).match(minuteUnitRegex)) {
+					return [...previous, { type: "minute", characters: current.length - 2, value: 0 }]; 
+				} else if ((current).match(secondUnitRegex)) {
+					return [...previous, { type: "second", characters: current.length - 2, value: 0 }]; 
+				} else if ((current).match(millisecondUnitRegex)) {
+					return [...previous, { type: "millisecond", characters: current.length - 2, value: 0 }]; 
+				}
+			
+				return [...previous, current]; 
+			}, []);
 	}
 
 	private _convertMillisToUnitValues(millis: number): DurationControlUnitValues {
