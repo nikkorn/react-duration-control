@@ -7,24 +7,33 @@ import { TimeDurationInput } from 'react-time-duration-input';
 import { DurationControl } from './DurationControl';
 
 function App() {
+  const [ pattern, setPattern ] = useState('Days {dd} Hours {hh} Minutes {mm} Seconds {ss} Millis {fff}');
   const [ millis, setMillis ] = useState(60000);
 
   return (
     <div className="App">
       <DurationControl 
-        pattern='Days {dd} Hours {hh} Minutes {mm} Seconds {ss} Millis {fff}'
+        pattern={pattern}
         value={millis}
         onChange={(value) => {
           console.log(`millis: ${value}`);
           setMillis(value);
         }}/>
 
-      <br/>
-
+      <h3>Pattern</h3>
       <input
-          type="number"
-          value={millis}
-          onChange={(event) => setMillis(parseInt(event.target.value))}>
+        size={60}
+        type="text"
+        value={pattern}
+        onChange={(event) => setPattern(event.target.value)}>
+      </input>
+
+      <h3>Millis</h3>
+      <input
+        size={60}
+        type="number"
+        value={millis}
+        onChange={(event) => setMillis(parseInt(event.target.value))}>
       </input>
     </div>
   );
