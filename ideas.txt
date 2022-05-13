@@ -22,3 +22,9 @@ The component can also take a number of children. These could be:
  If an input is empty it should show a default value of 0
 
  Should have a prop for amount to increment per unit on arrow click or up/down press.
+
+ What happens if the pattern units arent specifc enough (just showing secons input but providing a value of 1500 ms)?
+
+If we only have a seconds input but pass a millis value of 1500 do we:
+1. Get rid of the remainder in millis and return a value of 1000 in onChange
+2. Keep the remainder in millis and return a value of 1500 in onChange, even though the seconds field only has a value of 1.

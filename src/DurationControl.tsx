@@ -20,8 +20,10 @@ type DurationControlElement = DurationControlUnit | string;
  * The DurationControl component props.
  */
 export type DurationControlProps = {
+	/** The pattern. */
     pattern: string; 
 
+	/** The value in milliseconds. */
 	value: number;
 
 	onChange: (value: number) => void;
@@ -31,8 +33,14 @@ export type DurationControlProps = {
  * The DurationControl component state.
  */
 export type DurationControlState = {
+	/** The pattern. */
+	pattern: string; 
+
 	/** The duration control elements. */
     elements: DurationControlElement[];
+
+	/** The current value in milliseconds. */
+	milliseconds: number;
 };
 
 /**
@@ -55,14 +63,16 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 	public constructor(props: DurationControlProps) {
 		super(props);
 
+		const { pattern, value } = this.props;
+
 		// Parse the pattern into some unit and string elements.
-		const elements = DurationControl._parseElementsFromPattern(props.pattern);
+		const elements = DurationControl._parseElementsFromPattern(pattern);
 		
 		// Apply our initial value to the elements.
-		DurationControl._spreadMillisAcrossUnitElements(props.value, elements);
+		DurationControl._spreadMillisAcrossUnitElements(value, elements);
 
 		// Set the initial state for the component.
-		this.state = { elements };
+		this.state = { pattern, elements, milliseconds: value };
 
 		this._onUnitValueChange = this._onUnitValueChange.bind(this);
 	}
@@ -81,6 +91,15 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 
 	}
 
+	public static getDerivedStateFromProps(nextProps: DurationControlProps, prevState: DurationControlState) {
+		if (nextProps.value === prevState.milliseconds && nextProps.pattern === prevState.pattern) {
+			return null;
+		}
+
+		// TODO Remove
+		return null;
+	}
+	
 	/**
 	 * Renders the component.
 	 */
@@ -89,11 +108,11 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
             <div className="react-duration-control">
                 <div className="control-wrapper">
                     <div className="elements-container">
-						{this.state.elements.map((element => (
+						{this.state.elements.map(((element, index) => (
 							typeof element === "string" ? (
-								<DurationControlInlineText value={element} />
+								<DurationControlInlineText key={index} value={element} />
 							) : (
-								<DurationControlUnitInput type={element.type} characterLength={element.characters} value={element.value} onChange={(value) => this._onUnitValueChange(element.type, value)}></DurationControlUnitInput>
+								<DurationControlUnitInput key={element.type} type={element.type} characterLength={element.characters} value={element.value} onChange={(value) => this._onUnitValueChange(element.type, value)}></DurationControlUnitInput>
 							)
 						)))}
                     </div>
@@ -115,10 +134,23 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 			return;
 		}
 
+		// Get the previous and new unit values in millis.
+		const previousUnitValueMillis = unitElement.value === null ? 0 : unitElement.value * DurationControl.UNIT_MILLISECOND_MULTIPLIERS[type];
+		const newUnitValueMillis      = value === null ? 0 : value * DurationControl.UNIT_MILLISECOND_MULTIPLIERS[type];
+
+		// Work out the difference between the new and previous unit values in millis.
+		const unitValueMillisDifference = newUnitValueMillis - previousUnitValueMillis;
+
+		const updatedMilliseconds = this.state.milliseconds + unitValueMillisDifference;
+
+		console.log({ previousUnitValueMillis, newUnitValueMillis, unitValueMillisDifference, updatedMilliseconds });
+
 		// Update the unit value.
 		unitElement.value = value;
 		
-		this.setState({ elements });
+		this.setState({ elements, milliseconds: updatedMilliseconds });
+
+		//this.props.onChange(updatedMilliseconds);
 	}
 
 	private static _spreadMillisAcrossUnitElements(millis: number, elements: DurationControlElement[]): void {
