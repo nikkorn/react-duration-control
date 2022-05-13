@@ -93,11 +93,24 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 
 	public static getDerivedStateFromProps(nextProps: DurationControlProps, prevState: DurationControlState) {
 		if (nextProps.value === prevState.milliseconds && nextProps.pattern === prevState.pattern) {
+			console.log("no change!");
 			return null;
 		}
 
-		// TODO Remove
-		return null;
+		console.log("change!");
+
+		// Parse the pattern into some unit and string elements.
+		const elements = DurationControl._parseElementsFromPattern(nextProps.pattern);
+		
+		// Apply our initial value to the elements.
+		DurationControl._spreadMillisAcrossUnitElements(nextProps.value, elements);
+
+		// Set the initial state for the component.
+		return { 
+			pattern: nextProps.pattern, 
+			elements, 
+			milliseconds: nextProps.value 
+		};
 	}
 	
 	/**
@@ -150,7 +163,10 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		
 		this.setState({ elements, milliseconds: updatedMilliseconds });
 
-		//this.props.onChange(updatedMilliseconds);
+		// Call our 'onChange' callback, but only if the milliseconds value has actually changed.
+		if (unitValueMillisDifference) {
+			this.props.onChange(updatedMilliseconds);
+		}
 	}
 
 	private static _spreadMillisAcrossUnitElements(millis: number, elements: DurationControlElement[]): void {
