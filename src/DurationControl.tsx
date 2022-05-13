@@ -77,20 +77,6 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		this._onUnitValueChange = this._onUnitValueChange.bind(this);
 	}
 
-	/**
-	 * Called when the component is mounted.
-	 */
-	public componentDidMount(): void {
-
-	}
-
-	/**
-	 * Called when the component is about to be unmounted.
-	 */
-	public componentWillUnmount(): void {
-
-	}
-
 	public static getDerivedStateFromProps(nextProps: DurationControlProps, prevState: DurationControlState) {
 		if (nextProps.value === prevState.milliseconds && nextProps.pattern === prevState.pattern) {
 			console.log("no change!");

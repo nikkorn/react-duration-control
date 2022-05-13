@@ -18,6 +18,14 @@ function App() {
           console.log(`millis: ${value}`);
           setMillis(value);
         }}/>
+
+      <br/>
+
+      <input
+          type="number"
+          value={millis}
+          onChange={(event) => setMillis(parseInt(event.target.value))}>
+      </input>
     </div>
   );
 }
