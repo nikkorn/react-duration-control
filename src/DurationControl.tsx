@@ -136,6 +136,11 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
         );
 	}
 
+	/**
+	 * Handles the value changing for the specified unit duration type.
+	 * @param type The unit input type.
+	 * @param value The new value.
+	 */
 	private _onUnitValueChange(type: DurationUnitType, value: number | null): void {	
 		// Get a copy of our elements array.
 		const elements = this.state.elements.slice();
@@ -170,10 +175,18 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		}
 	}
 
+	/**
+	 * Handles a unit input element getting focus.
+	 * @param type The focused unit input type.
+	 */
 	private _onUnitInputFocus(type: DurationUnitType): void {	
 		this.setState({ lastFocusedInputUnitType: type });
 	}
 
+	/**
+	 * Handles a spinner button being clicked.
+	 * @param wasUpPressed Whether the 'up' spinner button was pressed, rather than the 'down' button.
+	 */
 	private _onSpinnerButtonClick(wasUpPressed: boolean): void {
 		if (!this.state.lastFocusedInputUnitType) {
 			return;
@@ -193,6 +206,11 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		this._onUnitValueChange(this.state.lastFocusedInputUnitType, updatedUnitValue);
 	}
 
+	/**
+	 * Takes a time value in milliseconds and spreads the value across all available unit elements.
+	 * @param millis The milliseconds value to spread across the unit elements.
+	 * @param elements The control elements.
+	 */
 	private static _spreadMillisAcrossUnitElements(millis: number, elements: DurationControlElement[]): void {
 		// A function to get the unit element with the specified duration unit type.
 		const getUnitElement = (type: DurationUnitType) => elements.find((element) => typeof element !== "string" && element.type === type) as DurationControlUnit;
@@ -226,6 +244,11 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		})
 	}
 
+	/**
+	 * Parse an array of duration control elements, either strings or unit input definitions, from the given pattern.
+	 * @param pattern The patterp to parse the elments from.
+	 * @returns An array of duration control elements, either strings or unit input definitions.
+	 */
 	private static _parseElementsFromPattern(pattern: string): DurationControlElement[] {
 		const patternRegex = /(\{d+\}|\{h+\}|\{m+\}|\{s+\}|\{f+\})/g;
 		const dayUnitRegex = /^{(d+)}$/g;
