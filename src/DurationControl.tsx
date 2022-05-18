@@ -110,7 +110,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 	public render(): React.ReactNode {
 		return (
             <div className="react-duration-control">
-                <div className="control-wrapper" onBlur={() => console.log("BLUR")}>
+                <div className="control-wrapper">
                     <div className="elements-container">
 						{this.state.elements.map(((element, index) => (
 							typeof element === "string" ? (
@@ -197,10 +197,12 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 
 		let updatedUnitValue;
 		
+		// We will increment or decrement the unit value based on which button was clicked.
 		if (wasUpPressed) {
 			updatedUnitValue = (unitElement.value || 0) + 1;
 		} else {
-			updatedUnitValue = (unitElement.value || 0) - 1;
+			// Get the decremented unit value, but make sure we do not go lower than zero.
+			updatedUnitValue = Math.max(0, (unitElement.value || 0) - 1);
 		}
 
 		this._onUnitValueChange(this.state.lastFocusedInputUnitType, updatedUnitValue);
