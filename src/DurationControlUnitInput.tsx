@@ -18,12 +18,14 @@ export type DurationControlUnitInputProps = {
     value: number | null;
 
 	onChange: (value: number | null) => void;
+
+    onFocus: () => void;
 };
 
 /**
  * The DurationControlUnitInput component.
  */
-export const DurationControlUnitInput: React.FunctionComponent<DurationControlUnitInputProps> = ({ value, onChange, type, characterLength }) => {
+export const DurationControlUnitInput: React.FunctionComponent<DurationControlUnitInputProps> = ({ value, type, characterLength, onChange, onFocus }) => {
     const [focused, setFocused] = React.useState(false);
 
     const getValue = (): string | number => {
@@ -63,6 +65,7 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
                 }}
                 onFocus={() => {
                     setFocused(true);
+                    onFocus();
                 }}
                 className={`duration-control-unit-input ${type}`} 
                 maxLength={characterLength}

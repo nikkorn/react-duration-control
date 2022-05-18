@@ -41,6 +41,9 @@ export type DurationControlState = {
 
 	/** The current value in milliseconds. */
 	milliseconds: number;
+
+	/** The last unit input to have focus. */
+	lastFocusedInputUnitType: DurationUnitType | null;
 };
 
 /**
@@ -71,19 +74,20 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		// Apply our initial value to the elements.
 		DurationControl._spreadMillisAcrossUnitElements(value, elements);
 
+		// TODO Default 'lastFocusedInputUnitType' to the unit element type with the smallest multiplier.
+
 		// Set the initial state for the component.
-		this.state = { pattern, elements, milliseconds: value };
+		this.state = { pattern, elements, milliseconds: value, lastFocusedInputUnitType: null };
 
 		this._onUnitValueChange = this._onUnitValueChange.bind(this);
+		this._onUnitInputFocus = this._onUnitInputFocus.bind(this);
+		this._onSpinnerButtonClick = this._onSpinnerButtonClick.bind(this);
 	}
 
 	public static getDerivedStateFromProps(nextProps: DurationControlProps, prevState: DurationControlState) {
 		if (nextProps.value === prevState.milliseconds && nextProps.pattern === prevState.pattern) {
-			console.log("no change!");
 			return null;
 		}
-
-		console.log("change!");
 
 		// Parse the pattern into some unit and string elements.
 		const elements = DurationControl._parseElementsFromPattern(nextProps.pattern);
@@ -95,7 +99,8 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		return { 
 			pattern: nextProps.pattern, 
 			elements, 
-			milliseconds: nextProps.value 
+			milliseconds: nextProps.value,
+			lastFocusedInputUnitType: null
 		};
 	}
 	
@@ -105,17 +110,27 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 	public render(): React.ReactNode {
 		return (
             <div className="react-duration-control">
-                <div className="control-wrapper">
+                <div className="control-wrapper" onBlur={() => console.log("BLUR")}>
                     <div className="elements-container">
 						{this.state.elements.map(((element, index) => (
 							typeof element === "string" ? (
 								<DurationControlInlineText key={index} value={element} />
 							) : (
-								<DurationControlUnitInput key={element.type} type={element.type} characterLength={element.characters} value={element.value} onChange={(value) => this._onUnitValueChange(element.type, value)}></DurationControlUnitInput>
+								<DurationControlUnitInput 
+									key={element.type} 
+									type={element.type} 
+									characterLength={element.characters} 
+									value={element.value} 
+									onChange={(value) => this._onUnitValueChange(element.type, value)}
+									onFocus={() => this._onUnitInputFocus(element.type)}
+								/>
 							)
 						)))}
                     </div>
-                    <Spinner />
+                    <Spinner
+						onUpButtonPress={() => this._onSpinnerButtonClick(true)}
+						onDownButtonPress={() => this._onSpinnerButtonClick(false)}
+					/>
                 </div>
             </div>
         );
@@ -153,6 +168,29 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		if (unitValueMillisDifference) {
 			this.props.onChange(updatedMilliseconds);
 		}
+	}
+
+	private _onUnitInputFocus(type: DurationUnitType): void {	
+		this.setState({ lastFocusedInputUnitType: type });
+	}
+
+	private _onSpinnerButtonClick(wasUpPressed: boolean): void {
+		if (!this.state.lastFocusedInputUnitType) {
+			return;
+		}
+
+		// Find the unit that matches the updated unit.
+		const unitElement = this.state.elements.find((element) => typeof element !== "string" && element.type === this.state.lastFocusedInputUnitType) as DurationControlUnit;
+
+		let updatedUnitValue;
+		
+		if (wasUpPressed) {
+			updatedUnitValue = (unitElement.value || 0) + 1;
+		} else {
+			updatedUnitValue = (unitElement.value || 0) - 1;
+		}
+
+		this._onUnitValueChange(this.state.lastFocusedInputUnitType, updatedUnitValue);
 	}
 
 	private static _spreadMillisAcrossUnitElements(millis: number, elements: DurationControlElement[]): void {
