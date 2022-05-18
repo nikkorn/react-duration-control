@@ -81,7 +81,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 
 		this._onUnitValueChange = this._onUnitValueChange.bind(this);
 		this._onUnitInputFocus = this._onUnitInputFocus.bind(this);
-		this._onSpinnerButtonClick = this._onSpinnerButtonClick.bind(this);
+		this._incrementOrDecrementUnitValue = this._incrementOrDecrementUnitValue.bind(this);
 	}
 
 	public static getDerivedStateFromProps(nextProps: DurationControlProps, prevState: DurationControlState) {
@@ -122,14 +122,16 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 									characterLength={element.characters} 
 									value={element.value} 
 									onChange={(value) => this._onUnitValueChange(element.type, value)}
+									onUpArrowKeyPress={() => this._incrementOrDecrementUnitValue(element.type, true)}
+									onDownArrowKeyPress={() => this._incrementOrDecrementUnitValue(element.type, false)}
 									onFocus={() => this._onUnitInputFocus(element.type)}
 								/>
 							)
 						)))}
                     </div>
                     <Spinner
-						onUpButtonPress={() => this._onSpinnerButtonClick(true)}
-						onDownButtonPress={() => this._onSpinnerButtonClick(false)}
+						onUpButtonPress={() => this._incrementOrDecrementUnitValue(this.state.lastFocusedInputUnitType, true)}
+						onDownButtonPress={() => this._incrementOrDecrementUnitValue(this.state.lastFocusedInputUnitType, false)}
 					/>
                 </div>
             </div>
@@ -162,8 +164,6 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 
 		const updatedMilliseconds = this.state.milliseconds + unitValueMillisDifference;
 
-		console.log({ previousUnitValueMillis, newUnitValueMillis, unitValueMillisDifference, updatedMilliseconds });
-
 		// Update the unit value.
 		unitElement.value = value;
 		
@@ -184,28 +184,27 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 	}
 
 	/**
-	 * Handles a spinner button being clicked.
-	 * @param wasUpPressed Whether the 'up' spinner button was pressed, rather than the 'down' button.
+	 * Increments or decrements the current value for the specified unit.
+	 * @param isIncrement Whether the the value should be incremented rather than decremeneted.
 	 */
-	private _onSpinnerButtonClick(wasUpPressed: boolean): void {
-		if (!this.state.lastFocusedInputUnitType) {
+	private _incrementOrDecrementUnitValue(unitType: DurationUnitType | null, isIncrement: boolean): void {
+		if (!unitType) {
 			return;
 		}
 
 		// Find the unit that matches the updated unit.
-		const unitElement = this.state.elements.find((element) => typeof element !== "string" && element.type === this.state.lastFocusedInputUnitType) as DurationControlUnit;
+		const unitElement = this.state.elements.find((element) => typeof element !== "string" && element.type === unitType) as DurationControlUnit;
 
 		let updatedUnitValue;
 		
-		// We will increment or decrement the unit value based on which button was clicked.
-		if (wasUpPressed) {
+		if (isIncrement) {
 			updatedUnitValue = (unitElement.value || 0) + 1;
 		} else {
 			// Get the decremented unit value, but make sure we do not go lower than zero.
 			updatedUnitValue = Math.max(0, (unitElement.value || 0) - 1);
 		}
 
-		this._onUnitValueChange(this.state.lastFocusedInputUnitType, updatedUnitValue);
+		this._onUnitValueChange(unitType, updatedUnitValue);
 	}
 
 	/**

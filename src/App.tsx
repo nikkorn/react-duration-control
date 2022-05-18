@@ -15,10 +15,7 @@ function App() {
       <DurationControl 
         pattern={pattern}
         value={millis}
-        onChange={(value) => {
-          console.log(`millis: ${value}`);
-          setMillis(value);
-        }}/>
+        onChange={(value) => setMillis(value)}/>
 
       <h3>Pattern</h3>
       <input

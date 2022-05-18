@@ -19,13 +19,17 @@ export type DurationControlUnitInputProps = {
 
 	onChange: (value: number | null) => void;
 
+    onUpArrowKeyPress: () => void;
+
+    onDownArrowKeyPress: () => void;
+
     onFocus: () => void;
 };
 
 /**
  * The DurationControlUnitInput component.
  */
-export const DurationControlUnitInput: React.FunctionComponent<DurationControlUnitInputProps> = ({ value, type, characterLength, onChange, onFocus }) => {
+export const DurationControlUnitInput: React.FunctionComponent<DurationControlUnitInputProps> = ({ value, type, characterLength, onChange, onUpArrowKeyPress, onDownArrowKeyPress, onFocus }) => {
     const [focused, setFocused] = React.useState(false);
 
     const getValue = (): string | number => {
@@ -55,6 +59,10 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
                         onChange(parseInt(event.target.value, 10));
                     }
                 }}
+                onFocus={() => {
+                    setFocused(true);
+                    onFocus();
+                }}
                 onBlur={(event) => {
                     setFocused(false);
 
@@ -63,9 +71,19 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
                         onChange(0);
                     }
                 }}
-                onFocus={() => {
-                    setFocused(true);
-                    onFocus();
+                onKeyDown={(event) => {
+                    // Prevent default cursor movement when the key pressed was an up or down arrow key.
+                    if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+                        event.preventDefault();
+                    }
+                }}
+                onKeyUp={(event) => {
+                    // Check whether the key pressed was an up or down arrow key.
+                    if (event.key === "ArrowUp") {
+                        onUpArrowKeyPress();
+                    } else if (event.key === "ArrowDown") {
+                        onDownArrowKeyPress();
+                    }
                 }}
                 className={`duration-control-unit-input ${type}`} 
                 maxLength={characterLength}
