@@ -87,7 +87,7 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
                 }}
                 className={`duration-control-unit-input ${type}`} 
                 maxLength={characterLength}
-                size={characterLength}>
+                style={{ width: `${characterLength * 8}px` }}>
             </input>
         </div>
     );

@@ -5,6 +5,7 @@ import "./DurationControl.css";
 import { DurationControlUnitInput, DurationUnitType } from "./DurationControlUnitInput";
 import { DurationControlInlineText } from "./DurationControlInlineText";
 import { Spinner } from "./Spinner";
+import { clamp } from "./Utilities";
 
 type DurationControlUnitValues = { [key in DurationUnitType]?: number }; 
 
@@ -80,7 +81,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		// Set the initial state for the component.
 		this.state = { pattern, elements, milliseconds: value, lastFocusedInputUnitType };
 
-		this._onUnitValueChange = this._onUnitValueChange.bind(this);
+		this._updateUnitValue = this._updateUnitValue.bind(this);
 		this._onUnitInputFocus = this._onUnitInputFocus.bind(this);
 		this._incrementOrDecrementUnitValue = this._incrementOrDecrementUnitValue.bind(this);
 	}
@@ -122,7 +123,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 									type={element.type} 
 									characterLength={element.characters} 
 									value={element.value} 
-									onChange={(value) => this._onUnitValueChange(element.type, value)}
+									onChange={(value) => this._updateUnitValue(element.type, value)}
 									onUpArrowKeyPress={() => this._incrementOrDecrementUnitValue(element.type, true)}
 									onDownArrowKeyPress={() => this._incrementOrDecrementUnitValue(element.type, false)}
 									onFocus={() => this._onUnitInputFocus(element.type)}
@@ -140,25 +141,29 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 	}
 
 	/**
-	 * Handles the value changing for the specified unit duration type.
+	 * Updates the value for the specified unit duration type.
 	 * @param type The unit input type.
 	 * @param value The new value.
 	 */
-	private _onUnitValueChange(type: DurationUnitType, value: number | null): void {	
+	private _updateUnitValue(type: DurationUnitType, value: number | null): void {	
 		// Get a copy of our elements array.
 		const elements = this.state.elements.slice();
 
 		// Find the unit that matches the updated unit.
 		const unitElement = elements.find((element) => typeof element !== "string" && element.type === type) as DurationControlUnit;
 
+		// Clamp the new value between zero and the maximum value defined by the unit character limit.
+		// e.g. If we had a unit character limit of 2 then our value would be clamped between 0 and 99.
+		const clampedValue = clamp(value, 0, Math.pow(10, unitElement.characters) - 1);
+
 		// There is nothing to do if the new value matches our old value.
-		if (unitElement.value === value) {
+		if (unitElement.value === clampedValue) {
 			return;
 		}
 
 		// Get the previous and new unit values in millis.
 		const previousUnitValueMillis = unitElement.value === null ? 0 : unitElement.value * DurationControl.UNIT_MILLISECOND_MULTIPLIERS[type];
-		const newUnitValueMillis      = value === null ? 0 : value * DurationControl.UNIT_MILLISECOND_MULTIPLIERS[type];
+		const newUnitValueMillis      = clampedValue === null ? 0 : clampedValue * DurationControl.UNIT_MILLISECOND_MULTIPLIERS[type];
 
 		// Work out the difference between the new and previous unit values in millis.
 		const unitValueMillisDifference = newUnitValueMillis - previousUnitValueMillis;
@@ -166,7 +171,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		const updatedMilliseconds = this.state.milliseconds + unitValueMillisDifference;
 
 		// Update the unit value.
-		unitElement.value = value;
+		unitElement.value = clampedValue;
 		
 		this.setState({ elements, milliseconds: updatedMilliseconds });
 
@@ -202,10 +207,10 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 			updatedUnitValue = (unitElement.value || 0) + 1;
 		} else {
 			// Get the decremented unit value, but make sure we do not go lower than zero.
-			updatedUnitValue = Math.max(0, (unitElement.value || 0) - 1);
+			updatedUnitValue = (unitElement.value || 0) - 1;
 		}
 
-		this._onUnitValueChange(unitType, updatedUnitValue);
+		this._updateUnitValue(unitType, updatedUnitValue);
 	}
 
 	/**
@@ -236,6 +241,8 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 			if (unitValue >= 1) {
 				// Get the truncated unit value.
 				const truncatedUnitValue = Math.trunc(unitValue);
+
+				// TODO Restrict truncatedUnitValue to the max value.
 
 				// Apply the unit value.
 				unitElement.value = truncatedUnitValue;
