@@ -21,6 +21,11 @@
     display: flex;
 }
 
+.duration-control-unit-display {
+    cursor: pointer;
+    font-weight: 500;
+}
+
 .duration-control-inline-text {
     display: inline-flex;
     align-items: center;
