@@ -42,10 +42,25 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
         return focused ? value : String(value).padStart(characterLength, "0");
     }
 
+    // If the unit does not currently have focus then we display the unit value as a span and not an input.
+    if (!focused) {
+        return (
+            <span
+                className="duration-control-unit-display"
+                onClick={() => {
+                    setFocused(true);
+                    onFocus();
+                }}>
+                {getValue()}
+            </span>
+        )
+    }
+
     return (
         <div className={`duration-control-unit-input-wrapper ${type}`}>
             <input
                 type="text"
+                autoFocus
                 value={getValue()}
                 onChange={(event) => {
                     // If our input is empty then the input value should be null.
@@ -58,10 +73,6 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
                     if (!Number.isNaN(Number(event.target.value))) {
                         onChange(parseInt(event.target.value, 10));
                     }
-                }}
-                onFocus={() => {
-                    setFocused(true);
-                    onFocus();
                 }}
                 onBlur={(event) => {
                     setFocused(false);
