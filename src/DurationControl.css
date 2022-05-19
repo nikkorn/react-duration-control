@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 3px;
+    padding: 5px;
     border: 1px gray solid;
     border-radius: 3px;
 }
@@ -14,7 +14,7 @@
 .react-duration-control > .control-wrapper > .elements-container {
     display: flex;
     flex-direction: row;
-    padding: 0px 5px;
+    padding: 0px 6px;
 }
 
 .duration-control-unit-input-wrapper {
@@ -25,6 +25,7 @@
     display: inline-flex;
     align-items: center;
     white-space: pre;
+    font-weight: 300;
 }
 
 .spinner-button-container {
