@@ -21,6 +21,12 @@
     display: flex;
 }
 
+.duration-control-inline-text {
+    display: inline-flex;
+    align-items: center;
+    white-space: pre;
+}
+
 .spinner-button-container {
     display: flex;
     flex-direction: column;

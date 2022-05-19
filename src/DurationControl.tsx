@@ -74,10 +74,11 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		// Apply our initial value to the elements.
 		DurationControl._spreadMillisAcrossUnitElements(value, elements);
 
-		// TODO Default 'lastFocusedInputUnitType' to the unit element type with the smallest multiplier.
+		// Default 'lastFocusedInputUnitType' to the unit element type with the smallest multiplier.
+		const lastFocusedInputUnitType = DurationControl._getSmallestUnitElementType(elements);
 
 		// Set the initial state for the component.
-		this.state = { pattern, elements, milliseconds: value, lastFocusedInputUnitType: null };
+		this.state = { pattern, elements, milliseconds: value, lastFocusedInputUnitType };
 
 		this._onUnitValueChange = this._onUnitValueChange.bind(this);
 		this._onUnitInputFocus = this._onUnitInputFocus.bind(this);
@@ -100,7 +101,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 			pattern: nextProps.pattern, 
 			elements, 
 			milliseconds: nextProps.value,
-			lastFocusedInputUnitType: null
+			lastFocusedInputUnitType: DurationControl._getSmallestUnitElementType(elements)
 		};
 	}
 	
@@ -243,6 +244,24 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 				remainingMillis -= truncatedUnitValue * DurationControl.UNIT_MILLISECOND_MULTIPLIERS[unitType];
 			}
 		})
+	}
+
+	/**
+	 * Gets the type of the smallest unit element present in the specified elements array.
+	 * @param elements The control elements array.
+	 * @returns The type of the smallest unit element present in the specified elements array.
+	 */
+	private static _getSmallestUnitElementType(elements: DurationControlElement[]): DurationUnitType | null {
+		// Get an array of all possible element unit types ordered by size ascending.
+		const unitsAscending: DurationUnitType[] = ["millisecond", "second", "minute", "hour", "day"];
+
+		for (const unit of unitsAscending) {
+			if (!!elements.find((element) => typeof element !== "string" && element.type === unit)) {
+				return unit;
+			}
+		}
+
+		return null;	
 	}
 
 	/**

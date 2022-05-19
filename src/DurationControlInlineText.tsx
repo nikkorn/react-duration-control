@@ -16,5 +16,5 @@ export type DurationControlInlineTextProps = {
  * The DurationControlInlineText component.
  */
 export const DurationControlInlineText: React.FunctionComponent<DurationControlInlineTextProps> = ({ value }) => {
-    return (<span style={{ whiteSpace: "pre" }}>{value}</span>);
+    return (<span className="duration-control-inline-text">{value}</span>);
 };
