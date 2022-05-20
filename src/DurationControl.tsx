@@ -27,7 +27,8 @@ export type DurationControlProps = {
 	/** The value in milliseconds. */
 	value: number;
 
-	onChange: (value: number) => void;
+	/** The change handler that is called whenever the control value changes. */
+	onChange: (milliseconds: number) => void;
 };
 
 /**

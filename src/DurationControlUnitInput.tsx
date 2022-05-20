@@ -30,6 +30,7 @@ export type DurationControlUnitInputProps = {
  * The DurationControlUnitInput component.
  */
 export const DurationControlUnitInput: React.FunctionComponent<DurationControlUnitInputProps> = ({ value, type, characterLength, onChange, onUpArrowKeyPress, onDownArrowKeyPress, onFocus }) => {
+    const inputRef = React.useRef<HTMLInputElement>(null);
     const [focused, setFocused] = React.useState(false);
 
     const getValue = (): string | number => {
@@ -59,6 +60,7 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
     return (
         <div className={`duration-control-unit-input-wrapper ${type}`}>
             <input
+                ref={inputRef}
                 type="text"
                 autoFocus
                 value={getValue()}
@@ -86,6 +88,15 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
                     // Prevent default cursor movement when the key pressed was an up or down arrow key.
                     if (event.key === "ArrowUp" || event.key === "ArrowDown") {
                         event.preventDefault();
+                    }
+
+                    if (event.key === "Enter") {
+                        setFocused(false);
+
+                        // If focus leaves our input and it is empty then we should reset the input value to zero.
+                        if (!inputRef.current?.value) {
+                            onChange(0);
+                        }
                     }
                 }}
                 onKeyUp={(event) => {
