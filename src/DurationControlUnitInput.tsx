@@ -46,7 +46,7 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
     if (!focused) {
         return (
             <span
-                className="duration-control-unit-display"
+                className="duration-control-unit-text"
                 onClick={() => {
                     setFocused(true);
                     onFocus();

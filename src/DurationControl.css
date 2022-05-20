@@ -21,7 +21,13 @@
     display: flex;
 }
 
-.duration-control-unit-display {
+.duration-control-unit-input:focus {
+    outline-width: 0;
+}
+
+.duration-control-unit-text {
+    display: inline-flex;
+    align-items: center;
     cursor: pointer;
     font-weight: 500;
 }
