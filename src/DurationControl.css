@@ -1,5 +1,11 @@
 .react-duration-control {
     display: inline-block;
+    border-radius: 3px;
+    background-color: rgb(255,255,255);
+}
+
+.react-duration-control.disabled {
+    background-color: rgb(240,240,240);
 }
 
 .react-duration-control > .control-wrapper {
@@ -7,14 +13,22 @@
     flex-direction: row;
     justify-content: space-between;
     padding: 5px;
-    border: 1px gray solid;
+    border: 1px rgb(120, 120, 120) solid;
     border-radius: 3px;
+}
+
+.react-duration-control.disabled > .control-wrapper {
+    border: 1px rgb(160, 160, 160) solid;
 }
 
 .react-duration-control > .control-wrapper > .elements-container {
     display: flex;
     flex-direction: row;
     padding: 0px 6px;
+}
+
+.react-duration-control.disabled > .control-wrapper > .elements-container {
+    opacity: 0.7;
 }
 
 .duration-control-unit-input-wrapper {

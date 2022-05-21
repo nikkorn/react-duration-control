@@ -7,8 +7,6 @@ import { DurationControlInlineText } from "./DurationControlInlineText";
 import { Spinner } from "./Spinner";
 import { clamp } from "./Utilities";
 
-type DurationControlUnitValues = { [key in DurationUnitType]?: number }; 
-
 type DurationControlUnit = {
 	type: DurationUnitType;
 	characters: number;
@@ -21,8 +19,17 @@ type DurationControlElement = DurationControlUnit | string;
  * The DurationControl component props.
  */
 export type DurationControlProps = {
+	/** The class to apply to the control. */
+	className?: string | undefined;
+
 	/** The pattern. */
     pattern: string; 
+
+	/** A flag indicating whether the control is disabled. */
+	disabled?: boolean;
+
+	/** A flag indicating whether to hide the control spinner. */
+	hideSpinner?: boolean;
 
 	/** The value in milliseconds. */
 	value: number;
@@ -87,6 +94,21 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		this._incrementOrDecrementUnitValue = this._incrementOrDecrementUnitValue.bind(this);
 	}
 
+	/** Gets the control class name. */
+	private get _controlClassName(): string {
+		const classes = ["react-duration-control"];
+
+		if (this.props.className) {
+			classes.push(this.props.className);
+		}
+
+		if (this.props.disabled) {
+			classes.push("disabled");
+		}
+
+		return classes.join(" ");
+	}
+
 	public static getDerivedStateFromProps(nextProps: DurationControlProps, prevState: DurationControlState) {
 		if (nextProps.value === prevState.milliseconds && nextProps.pattern === prevState.pattern) {
 			return null;
@@ -112,14 +134,14 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 	 */
 	public render(): React.ReactNode {
 		return (
-            <div className="react-duration-control">
+            <div className={this._controlClassName}>
                 <div className="control-wrapper">
                     <div className="elements-container">
 						{this.state.elements.map(((element, index) => (
 							typeof element === "string" ? (
 								<DurationControlInlineText key={index} value={element} />
 							) : (
-								<DurationControlUnitInput 
+								<DurationControlUnitInput
 									key={element.type} 
 									type={element.type} 
 									characterLength={element.characters} 
@@ -128,14 +150,18 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 									onUpArrowKeyPress={() => this._incrementOrDecrementUnitValue(element.type, true)}
 									onDownArrowKeyPress={() => this._incrementOrDecrementUnitValue(element.type, false)}
 									onFocus={() => this._onUnitInputFocus(element.type)}
+									disabled={this.props.disabled}
 								/>
 							)
 						)))}
                     </div>
-                    <Spinner
-						onUpButtonPress={() => this._incrementOrDecrementUnitValue(this.state.lastFocusedInputUnitType, true)}
-						onDownButtonPress={() => this._incrementOrDecrementUnitValue(this.state.lastFocusedInputUnitType, false)}
-					/>
+					{this.props.hideSpinner ? (<></>) : (
+						<Spinner
+							onUpButtonPress={() => this._incrementOrDecrementUnitValue(this.state.lastFocusedInputUnitType, true)}
+							onDownButtonPress={() => this._incrementOrDecrementUnitValue(this.state.lastFocusedInputUnitType, false)}
+							disabled={this.props.disabled}
+						/>
+					)}
                 </div>
             </div>
         );

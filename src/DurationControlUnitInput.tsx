@@ -24,12 +24,15 @@ export type DurationControlUnitInputProps = {
     onDownArrowKeyPress: () => void;
 
     onFocus: () => void;
+
+    /** A flag indicating whether the unit input is disabled. */
+	disabled: boolean | undefined;
 };
 
 /**
  * The DurationControlUnitInput component.
  */
-export const DurationControlUnitInput: React.FunctionComponent<DurationControlUnitInputProps> = ({ value, type, characterLength, onChange, onUpArrowKeyPress, onDownArrowKeyPress, onFocus }) => {
+export const DurationControlUnitInput: React.FunctionComponent<DurationControlUnitInputProps> = ({ value, type, characterLength, onChange, onUpArrowKeyPress, onDownArrowKeyPress, onFocus, disabled }) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [focused, setFocused] = React.useState(false);
 
@@ -44,13 +47,15 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
     }
 
     // If the unit does not currently have focus then we display the unit value as a span and not an input.
-    if (!focused) {
+    if (!focused || disabled) {
         return (
             <span
                 className="duration-control-unit-text"
                 onClick={() => {
-                    setFocused(true);
-                    onFocus();
+                    if (!disabled) {
+                        setFocused(true);
+                        onFocus();
+                    }
                 }}>
                 {getValue()}
             </span>

@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
 
-import DurationInput from 'react-duration';
-import { TimeDurationInput } from 'react-time-duration-input';
-
 import { DurationControl } from './DurationControl';
 
 function App() {
@@ -12,7 +9,9 @@ function App() {
 
   return (
     <div className="App">
-      <DurationControl 
+      <DurationControl
+        disabled={false}
+        hideSpinner={false}
         pattern={pattern}
         value={millis}
         onChange={(value) => setMillis(value)}/>
