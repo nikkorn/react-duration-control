@@ -25,17 +25,47 @@ export type DurationControlProps = {
 	/** The pattern. */
     pattern: string; 
 
+	/** The value in milliseconds. */
+	value: number;
+
+	/** The change handler that is called whenever the control value changes. */
+	onChange: (milliseconds: number) => void;
+
 	/** A flag indicating whether the control is disabled. */
 	disabled?: boolean;
 
 	/** A flag indicating whether to hide the control spinner. */
 	hideSpinner?: boolean;
 
-	/** The value in milliseconds. */
-	value: number;
+	/** The maximum value for the day unit. Defaults to Number.MAX_SAFE_INTEGER */
+	dMax?: number;
 
-	/** The change handler that is called whenever the control value changes. */
-	onChange: (milliseconds: number) => void;
+	/** The amount to increment/decrement the day unit value by when an up/down arrow key or spinner button is pressed. Defaults to 1. */
+	dStep?: number;
+
+	/** The maximum value for the hour unit. Defaults to Number.MAX_SAFE_INTEGER */
+	hMax?: number;
+
+	/** The amount to increment/decrement the hour unit value by when an up/down arrow key or spinner button is pressed. Defaults to 1. */
+	hStep?: number;
+
+	/** The maximum value for the minute unit. Defaults to Number.MAX_SAFE_INTEGER */
+	mMax?: number;
+
+	/** The amount to increment/decrement the minute unit value by when an up/down arrow key or spinner button is pressed. Defaults to 1. */
+	mStep?: number;
+
+	/** The maximum value for the second unit. Defaults to Number.MAX_SAFE_INTEGER */
+	sMax?: number;
+
+	/** The amount to increment/decrement the second unit value by when an up/down arrow key or spinner button is pressed. Defaults to 1. */
+	sStep?: number;
+
+	/** The maximum value for the millisecond unit. Defaults to Number.MAX_SAFE_INTEGER */
+	fMax?: number;
+
+	/** The amount to increment/decrement the millisecond unit value by when an up/down arrow key or spinner button is pressed. Defaults to 1. */
+	fStep?: number;
 };
 
 /**
@@ -67,6 +97,20 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		second: 1000,
 		millisecond: 1
 	};
+
+	// The default component props.
+	static defaultProps = {
+		dMax: Number.MAX_SAFE_INTEGER,
+		dStep: 1,
+		hMax: Number.MAX_SAFE_INTEGER,
+		hStep: 1,
+		mMax: Number.MAX_SAFE_INTEGER,
+		mStep: 1,
+		sMax: Number.MAX_SAFE_INTEGER,
+		sStep: 1,
+		fMax: Number.MAX_SAFE_INTEGER,
+		fStep: 1
+	}
 
 	/**
 	 * Creates the DurationControl element.
@@ -109,6 +153,12 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		return classes.join(" ");
 	}
 
+	/**
+	 * Gets the state derived from the given props.
+	 * @param nextProps The next props.
+	 * @param prevState The previous state.
+	 * @returns The state derived from the given props.
+	 */
 	public static getDerivedStateFromProps(nextProps: DurationControlProps, prevState: DurationControlState) {
 		if (nextProps.value === prevState.milliseconds && nextProps.pattern === prevState.pattern) {
 			return null;
@@ -228,16 +278,61 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		// Find the unit that matches the updated unit.
 		const unitElement = this.state.elements.find((element) => typeof element !== "string" && element.type === unitType) as DurationControlUnit;
 
+		// Get the step value for the unit type.
+		const { step } = this._getUnitPropValues(unitType);
+
 		let updatedUnitValue;
 		
 		if (isIncrement) {
-			updatedUnitValue = (unitElement.value || 0) + 1;
+			updatedUnitValue = (unitElement.value || 0) + step;
 		} else {
 			// Get the decremented unit value, but make sure we do not go lower than zero.
-			updatedUnitValue = (unitElement.value || 0) - 1;
+			updatedUnitValue = (unitElement.value || 0) - step;
 		}
 
 		this._updateUnitValue(unitType, updatedUnitValue);
+	}
+
+	/**
+	 * Gets the max and step prop values for the given unit type.
+	 * @param unitType The unit type.
+	 * @returns The max and step prop values for the given unit type.
+	 */
+	private _getUnitPropValues(unitType: DurationUnitType): { step: number, max: number } {
+		switch (unitType) {
+			case "day":
+				return ({
+					step: this.props.dStep!,
+					max: this.props.dMax!
+				});
+
+			case "hour":
+				return ({
+					step: this.props.hStep!,
+					max: this.props.hMax!
+				});
+
+			case "minute":
+				return ({
+					step: this.props.mStep!,
+					max: this.props.mMax!
+				});
+
+			case "second":
+				return ({
+					step: this.props.sStep!,
+					max: this.props.sMax!
+				});
+
+			case "millisecond":
+				return ({
+					step: this.props.fStep!,
+					max: this.props.fMax!
+				});
+
+			default:
+				throw new Error(`unexpected unit type: ${unitType}`);
+		}
 	}
 
 	/**
