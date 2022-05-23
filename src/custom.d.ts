@@ -1,5 +1,5 @@
 declare module "react-time-duration-input" {
-    import React from 'react';
+    import React from "react";
 
     interface MyComponentProps {
         prop1: boolean;
@@ -11,7 +11,7 @@ declare module "react-time-duration-input" {
 }
 
 declare module "react-duration" {
-    import React from 'react';
+    import React from "react";
 
     interface MyComponentProps {
         prop1: boolean;

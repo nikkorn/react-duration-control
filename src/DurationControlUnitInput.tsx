@@ -3,7 +3,12 @@ import * as React from "react";
 /**
  * The duration unit types.
  */
-export type DurationUnitType = "day" | "hour" | "minute" | "second" | "millisecond";
+export type DurationUnitType =
+    | "day"
+    | "hour"
+    | "minute"
+    | "second"
+    | "millisecond";
 
 /**
  * The DurationControlUnitInput component props.
@@ -17,7 +22,7 @@ export type DurationControlUnitInputProps = {
 
     value: number | null;
 
-	onChange: (value: number | null) => void;
+    onChange: (value: number | null) => void;
 
     onUpArrowKeyPress: () => void;
 
@@ -26,13 +31,24 @@ export type DurationControlUnitInputProps = {
     onFocus: () => void;
 
     /** A flag indicating whether the unit input is disabled. */
-	disabled: boolean | undefined;
+    disabled: boolean | undefined;
 };
 
 /**
  * The DurationControlUnitInput component.
  */
-export const DurationControlUnitInput: React.FunctionComponent<DurationControlUnitInputProps> = ({ value, type, characterLength, onChange, onUpArrowKeyPress, onDownArrowKeyPress, onFocus, disabled }) => {
+export const DurationControlUnitInput: React.FunctionComponent<
+    DurationControlUnitInputProps
+> = ({
+    value,
+    type,
+    characterLength,
+    onChange,
+    onUpArrowKeyPress,
+    onDownArrowKeyPress,
+    onFocus,
+    disabled
+}) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [focused, setFocused] = React.useState(false);
 
@@ -44,7 +60,7 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
 
         // If our field is focused then we want to show the raw value. If it isn't then we want our padded value.
         return focused ? value : String(value).padStart(characterLength, "0");
-    }
+    };
 
     // If the unit does not currently have focus then we display the unit value as a span and not an input.
     if (!focused || disabled) {
@@ -56,10 +72,11 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
                         setFocused(true);
                         onFocus();
                     }
-                }}>
+                }}
+            >
                 {getValue()}
             </span>
-        )
+        );
     }
 
     return (
@@ -112,10 +129,10 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
                         onDownArrowKeyPress();
                     }
                 }}
-                className={`duration-control-unit-input ${type}`} 
+                className={`duration-control-unit-input ${type}`}
                 maxLength={characterLength}
-                style={{ width: `${characterLength * 8}px` }}>
-            </input>
+                style={{ width: `${characterLength * 8}px` }}
+            ></input>
         </div>
     );
 };
