@@ -98,7 +98,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		millisecond: 1
 	};
 
-	// The default component props.
+	/** The default component props. */
 	static defaultProps = {
 		dMax: Number.MAX_SAFE_INTEGER,
 		dStep: 1,
@@ -125,7 +125,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		const elements = DurationControl._parseElementsFromPattern(pattern);
 		
 		// Apply our initial value to the elements.
-		DurationControl._spreadMillisAcrossUnitElements(value, elements);
+		DurationControl._spreadMillisAcrossUnitElements(value, elements, props);
 
 		// Default 'lastFocusedInputUnitType' to the unit element type with the smallest multiplier.
 		const lastFocusedInputUnitType = DurationControl._getSmallestUnitElementType(elements);
@@ -168,7 +168,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		const elements = DurationControl._parseElementsFromPattern(nextProps.pattern);
 		
 		// Apply our initial value to the elements.
-		DurationControl._spreadMillisAcrossUnitElements(nextProps.value, elements);
+		DurationControl._spreadMillisAcrossUnitElements(nextProps.value, elements, nextProps);
 
 		// Set the initial state for the component.
 		return { 
@@ -279,7 +279,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		const unitElement = this.state.elements.find((element) => typeof element !== "string" && element.type === unitType) as DurationControlUnit;
 
 		// Get the step value for the unit type.
-		const { step } = this._getUnitPropValues(unitType);
+		const { step } = DurationControl._getUnitPropValues(unitType, this.props);
 
 		let updatedUnitValue;
 		
@@ -296,38 +296,39 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 	/**
 	 * Gets the max and step prop values for the given unit type.
 	 * @param unitType The unit type.
+	 * @param props The component props.
 	 * @returns The max and step prop values for the given unit type.
 	 */
-	private _getUnitPropValues(unitType: DurationUnitType): { step: number, max: number } {
+	private static _getUnitPropValues(unitType: DurationUnitType, props: DurationControlProps): { step: number, max: number } {
 		switch (unitType) {
 			case "day":
 				return ({
-					step: this.props.dStep!,
-					max: this.props.dMax!
+					step: props.dStep!,
+					max: props.dMax!
 				});
 
 			case "hour":
 				return ({
-					step: this.props.hStep!,
-					max: this.props.hMax!
+					step: props.hStep!,
+					max: props.hMax!
 				});
 
 			case "minute":
 				return ({
-					step: this.props.mStep!,
-					max: this.props.mMax!
+					step: props.mStep!,
+					max: props.mMax!
 				});
 
 			case "second":
 				return ({
-					step: this.props.sStep!,
-					max: this.props.sMax!
+					step: props.sStep!,
+					max: props.sMax!
 				});
 
 			case "millisecond":
 				return ({
-					step: this.props.fStep!,
-					max: this.props.fMax!
+					step: props.fStep!,
+					max: props.fMax!
 				});
 
 			default:
@@ -339,8 +340,9 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 	 * Takes a time value in milliseconds and spreads the value across all available unit elements.
 	 * @param millis The milliseconds value to spread across the unit elements.
 	 * @param elements The control elements.
+	 * @param props The component props.
 	 */
-	private static _spreadMillisAcrossUnitElements(millis: number, elements: DurationControlElement[]): void {
+	private static _spreadMillisAcrossUnitElements(millis: number, elements: DurationControlElement[], props: DurationControlProps): void {
 		// A function to get the unit element with the specified duration unit type.
 		const getUnitElement = (type: DurationUnitType) => elements.find((element) => typeof element !== "string" && element.type === type) as DurationControlUnit;
 
@@ -362,9 +364,13 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 
 			if (unitValue >= 1) {
 				// Get the truncated unit value.
-				const truncatedUnitValue = Math.trunc(unitValue);
+				let truncatedUnitValue = Math.trunc(unitValue);
 
-				// TODO Restrict truncatedUnitValue to the max value.
+				// Get the max value for this unit type.
+				const { max } = this._getUnitPropValues(unitType, props);
+
+				// Restrict truncatedUnitValue to the max value for the current unit.
+				truncatedUnitValue = Math.min(truncatedUnitValue, max);
 
 				// Apply the unit value.
 				unitElement.value = truncatedUnitValue;

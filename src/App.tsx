@@ -10,6 +10,7 @@ function App() {
   return (
     <div className="App">
       <DurationControl
+        dMax={10}
         disabled={false}
         hideSpinner={false}
         pattern={pattern}
