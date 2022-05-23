@@ -279,11 +279,11 @@ export class DurationControl extends React.Component<
 
     /**
      * Updates the value for the specified unit duration type.
-     * @param type The unit input type.
+     * @param unitType The unit input type.
      * @param value The new value.
      */
     private _updateUnitValue(
-        type: DurationUnitType,
+        unitType: DurationUnitType,
         value: number | null
     ): void {
         // Get a copy of our elements array.
@@ -291,15 +291,22 @@ export class DurationControl extends React.Component<
 
         // Find the unit that matches the updated unit.
         const unitElement = elements.find(
-            (element) => typeof element !== "string" && element.type === type
+            (element) =>
+                typeof element !== "string" && element.type === unitType
         ) as DurationControlUnit;
 
-        // Clamp the new value between zero and the maximum value defined by the unit character limit.
-        // e.g. If we had a unit character limit of 2 then our value would be clamped between 0 and 99.
+        // Get the max value for this unit type.
+        const { max } = DurationControl._getUnitPropValues(
+            unitType,
+            this.props
+        );
+
+        // Clamp the new value between zero and either the maximum value defined by the unit character limit or the explict unit max.
+        // e.g. If we had a unit character limit of 2 then our value would be clamped between 0 and 99 if no explicit unit max is defined.
         const clampedValue = clamp(
             value,
             0,
-            Math.pow(10, unitElement.characters) - 1
+            Math.min(Math.pow(10, unitElement.characters) - 1, max)
         );
 
         // There is nothing to do if the new value matches our old value.
@@ -312,12 +319,12 @@ export class DurationControl extends React.Component<
             unitElement.value === null
                 ? 0
                 : unitElement.value *
-                  DurationControl.UNIT_MILLISECOND_MULTIPLIERS[type];
+                  DurationControl.UNIT_MILLISECOND_MULTIPLIERS[unitType];
         const newUnitValueMillis =
             clampedValue === null
                 ? 0
                 : clampedValue *
-                  DurationControl.UNIT_MILLISECOND_MULTIPLIERS[type];
+                  DurationControl.UNIT_MILLISECOND_MULTIPLIERS[unitType];
 
         // Work out the difference between the new and previous unit values in millis.
         const unitValueMillisDifference =
