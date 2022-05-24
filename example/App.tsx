@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 
-import { DurationControl } from "./DurationControl";
+import { DurationControl } from "../src/DurationControl";
 
 function App() {
     const [pattern, setPattern] = useState(
