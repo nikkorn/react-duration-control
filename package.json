@@ -1,49 +1,48 @@
 {
   "name": "react-duration-control",
+  "author": "nikkorn",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.2.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.0",
-    "@types/node": "^16.11.33",
-    "@types/react": "^18.0.8",
-    "@types/react-dom": "^18.0.3",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-duration": "^1.0.8",
-    "react-scripts": "5.0.1",
-    "react-time-duration-input": "^1.1.1",
-    "typescript": "^4.6.4",
-    "web-vitals": "^2.1.4"
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "build": "rollup -c",
+    "start": "rollup -c -w",
     "format": "prettier --write \"src/**\""
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {},
+  "peerDependencies": {
+    "react": ">= 16.8.0 < 2",
+    "react-dom": ">= 16.8.0 < 2"
   },
   "devDependencies": {
-    "prettier": "^2.6.2"
-  }
+    "@types/react": "^16.3.13",
+    "@types/react-dom": "^16.0.5",
+    "babel-core": "^6.26.3",
+    "babel-runtime": "^6.26.0",
+    "prettier": "^2.6.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "rollup": "^1.29.0",
+    "rollup-plugin-sass": "^1.2.2",
+    "rollup-plugin-typescript2": "^0.25.3",
+    "typescript": "^2.8.3"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "react",
+    "typescript",
+    "duration",
+    "time",
+    "control",
+    "picker",
+    "input",
+    "seconds",
+    "milliseconds"
+  ]
 }

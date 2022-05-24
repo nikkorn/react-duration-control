@@ -116,7 +116,7 @@ export const DurationControlUnitInput: React.FunctionComponent<
                         setFocused(false);
 
                         // If focus leaves our input and it is empty then we should reset the input value to zero.
-                        if (!inputRef.current?.value) {
+                        if (!inputRef.current || !inputRef.current.value) {
                             onChange(0);
                         }
                     }
