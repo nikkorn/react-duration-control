@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import "./DurationControl.scss";
+import "./DurationControl.css";
 
 import {
     DurationControlUnitInput,
