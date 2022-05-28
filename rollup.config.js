@@ -15,5 +15,5 @@ export default {
     }
   ],
   plugins: [sass({ insert: true }), typescript()],
-  external: ['react', 'react-dom', './DurationControl.css']
+  external: ['react', 'react-dom']
 }
