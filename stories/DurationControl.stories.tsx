@@ -3,20 +3,27 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { DurationControl } from '../src/DurationControl';
 
-const Tester = ({ label }) => {
-  return <p>{label}</p>;
-}
+const DurationControlWrapper = ({ pattern, disabled, hideSpinner }) => {
+  const [millis, setMillis] = useState(0);
 
-const DurationControlWrapper = ({ pattern, value, disabled, hideSpinner }) => {
-  const [millis, setMillis] = useState(value);
-
-  return <DurationControl
-    disabled={disabled}
-    hideSpinner={hideSpinner}
-    pattern={pattern}
-    value={millis}
-    onChange={setMillis}
-  />;
+  return (
+    <div>
+        <DurationControl
+            disabled={disabled}
+            hideSpinner={hideSpinner}
+            pattern={pattern}
+            value={millis}
+            onChange={(value) => setMillis(value)}
+        />
+        <h3>Millis</h3>
+        <input
+            size={60}
+            type="number"
+            value={millis}
+            onChange={(event) => setMillis(parseInt(event.target.value))}
+        ></input>
+    </div>
+  );
 }
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -31,7 +38,6 @@ const Template: ComponentStory<typeof DurationControlWrapper> = (args) => <Durat
 export const AllUnits = Template.bind({});
 AllUnits.args = {
   pattern: "Days {dd} Hours {hh} Minutes {mm} Seconds {ss} Millis {fff}",
-  value: 0,
   disabled: false,
   hideSpinner: false
 };
