@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { DurationControl } from '../src/DurationControl';
@@ -8,12 +8,14 @@ const Tester = ({ label }) => {
 }
 
 const DurationControlWrapper = ({ pattern, value }) => {
+  const [millis, setMillis] = useState(value);
+
   return <DurationControl
     disabled={false}
     hideSpinner={false}
     pattern={pattern}
-    value={value}
-    onChange={(value) => {console.log("What do we do with this?")}}
+    value={millis}
+    onChange={setMillis}
   />;
 }
 
