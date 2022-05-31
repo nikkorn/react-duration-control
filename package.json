@@ -4,6 +4,7 @@
   "description": "A React duration control",
   "main": "index.js",
   "scripts": {
+    "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -35,6 +36,7 @@
   "homepage": "https://github.com/nikkorn/react-duration-control#readme",
   "devDependencies": {
     "@babel/core": "^7.18.2",
+    "@rollup/plugin-typescript": "^8.3.2",
     "@storybook/addon-actions": "^6.5.5",
     "@storybook/addon-essentials": "^6.5.5",
     "@storybook/addon-interactions": "^6.5.5",
@@ -46,6 +48,9 @@
     "babel-loader": "^8.2.5",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "rollup": "^2.75.3",
+    "rollup-plugin-import-css": "^3.0.3",
+    "rollup-plugin-typescript2": "^0.31.2",
     "typescript": "^4.7.2"
   },
   "dependencies": {}
