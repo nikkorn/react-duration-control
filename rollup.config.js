@@ -14,6 +14,6 @@ export default {
       strict: false
     }
   ],
-  plugins: [css(), typescript()],
+  plugins: [css({ output: "react-duration-control" }), typescript()],
   external: ['react', 'react-dom']
 }
