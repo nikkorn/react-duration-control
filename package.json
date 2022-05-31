@@ -40,7 +40,6 @@
   "homepage": "https://github.com/nikkorn/react-duration-control#readme",
   "devDependencies": {
     "@babel/core": "^7.18.2",
-    "@rollup/plugin-typescript": "^8.3.2",
     "@storybook/addon-actions": "^6.5.5",
     "@storybook/addon-essentials": "^6.5.5",
     "@storybook/addon-interactions": "^6.5.5",
