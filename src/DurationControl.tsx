@@ -135,7 +135,7 @@ export class DurationControl extends React.Component<
         const elements = DurationControl._parseElementsFromProps(props);
 
         // Apply our initial value to the elements.
-        DurationControl._spreadMillisAcrossUnitElements(value, elements, props);
+        DurationControl._spreadMillisAcrossUnitElements(value, elements);
 
         // Default 'lastFocusedInputUnitType' to the unit element type with the smallest multiplier.
         const lastFocusedInputUnitType =
@@ -191,11 +191,7 @@ export class DurationControl extends React.Component<
         const elements = DurationControl._parseElementsFromProps(nextProps);
 
         // Apply our initial value to the elements.
-        DurationControl._spreadMillisAcrossUnitElements(
-            nextProps.value,
-            elements,
-            nextProps
-        );
+        DurationControl._spreadMillisAcrossUnitElements(nextProps.value, elements);
 
         // Set the initial state for the component.
         return {
@@ -423,12 +419,10 @@ export class DurationControl extends React.Component<
      * Takes a time value in milliseconds and spreads the value across all available unit elements.
      * @param millis The milliseconds value to spread across the unit elements.
      * @param elements The control elements.
-     * @param props The component props.
      */
     private static _spreadMillisAcrossUnitElements(
         millis: number,
-        elements: DurationControlElement[],
-        props: DurationControlProps
+        elements: DurationControlElement[]
     ): void {
         // A function to get the unit element with the specified duration unit type.
         const getUnitElement = (type: DurationUnitType) =>
@@ -465,11 +459,8 @@ export class DurationControl extends React.Component<
                 // Get the truncated unit value.
                 let truncatedUnitValue = Math.trunc(unitValue);
 
-                // Get the max value for this unit type.
-                const { max } = this._getUnitPropValues(unitType, props);
-
                 // Restrict truncatedUnitValue to the max value for the current unit.
-                truncatedUnitValue = Math.min(truncatedUnitValue, max);
+                truncatedUnitValue = Math.min(truncatedUnitValue, unitElement.max);
 
                 // Apply the unit value.
                 unitElement.value = truncatedUnitValue;
