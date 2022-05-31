@@ -595,8 +595,12 @@ export class DurationControl extends React.Component<
                 return [...previous, current];
             }, []);
 
-        // TODO Double check that we don't have duplicate unit types.
-        // ["day","hour","minute","second","millisecond"].forEach((unit) => {});
+        // Double check that we don't have duplicate unit types.
+        ["day", "hour", "minute", "second", "millisecond"].forEach((unit) => {
+            if (elements.filter((element) => typeof element !== "string" && element.type === unit).length > 1) {
+                throw new Error(`cannot have duplicate unit types in pattern (${unit})`);
+            }
+        });
 
         return elements;
     }
