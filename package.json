@@ -2,7 +2,7 @@
   "name": "react-duration-control",
   "version": "0.1.0",
   "description": "A React duration control",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -51,6 +51,7 @@
     "rollup": "^2.75.3",
     "rollup-plugin-import-css": "^3.0.3",
     "rollup-plugin-typescript2": "^0.31.2",
+    "tslib": "^2.4.0",
     "typescript": "^4.7.2"
   },
   "dependencies": {}
