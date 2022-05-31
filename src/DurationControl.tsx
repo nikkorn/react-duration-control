@@ -13,6 +13,8 @@ import { clamp } from "./Utilities";
 type DurationControlUnit = {
     type: DurationUnitType;
     characters: number;
+    step: number;
+    max: number;
     value: number | null;
 };
 
@@ -129,11 +131,11 @@ export class DurationControl extends React.Component<
 
         const { pattern, value } = this.props;
 
-        // Parse the pattern into some unit and string elements.
-        const elements = DurationControl._parseElementsFromPattern(pattern);
+        // Parse the props into some unit and string elements.
+        const elements = DurationControl._parseElementsFromProps(props);
 
         // Apply our initial value to the elements.
-        DurationControl._spreadMillisAcrossUnitElements(value, elements, props);
+        DurationControl._spreadMillisAcrossUnitElements(value, elements);
 
         // Default 'lastFocusedInputUnitType' to the unit element type with the smallest multiplier.
         const lastFocusedInputUnitType =
@@ -185,17 +187,11 @@ export class DurationControl extends React.Component<
             return null;
         }
 
-        // Parse the pattern into some unit and string elements.
-        const elements = DurationControl._parseElementsFromPattern(
-            nextProps.pattern
-        );
+        // Parse the props into some unit and string elements.
+        const elements = DurationControl._parseElementsFromProps(nextProps);
 
         // Apply our initial value to the elements.
-        DurationControl._spreadMillisAcrossUnitElements(
-            nextProps.value,
-            elements,
-            nextProps
-        );
+        DurationControl._spreadMillisAcrossUnitElements(nextProps.value, elements);
 
         // Set the initial state for the component.
         return {
@@ -295,19 +291,9 @@ export class DurationControl extends React.Component<
                 typeof element !== "string" && element.type === unitType
         ) as DurationControlUnit;
 
-        // Get the max value for this unit type.
-        const { max } = DurationControl._getUnitPropValues(
-            unitType,
-            this.props
-        );
-
         // Clamp the new value between zero and either the maximum value defined by the unit character limit or the explict unit max.
         // e.g. If we had a unit character limit of 2 then our value would be clamped between 0 and 99 if no explicit unit max is defined.
-        const clampedValue = clamp(
-            value,
-            0,
-            Math.min(Math.pow(10, unitElement.characters) - 1, max)
-        );
+        const clampedValue = clamp(value, 0, unitElement.max);
 
         // There is nothing to do if the new value matches our old value.
         if (unitElement.value === clampedValue) {
@@ -370,19 +356,14 @@ export class DurationControl extends React.Component<
                 typeof element !== "string" && element.type === unitType
         ) as DurationControlUnit;
 
-        // Get the step value for the unit type.
-        const { step } = DurationControl._getUnitPropValues(
-            unitType,
-            this.props
-        );
-
         let updatedUnitValue;
 
         if (isIncrement) {
-            updatedUnitValue = (unitElement.value || 0) + step;
+            // Get the incremeneted unit value.
+            updatedUnitValue = (unitElement.value || 0) + unitElement.step;
         } else {
             // Get the decremented unit value, but make sure we do not go lower than zero.
-            updatedUnitValue = (unitElement.value || 0) - step;
+            updatedUnitValue = (unitElement.value || 0) - unitElement.step;
         }
 
         this._updateUnitValue(unitType, updatedUnitValue);
@@ -438,12 +419,10 @@ export class DurationControl extends React.Component<
      * Takes a time value in milliseconds and spreads the value across all available unit elements.
      * @param millis The milliseconds value to spread across the unit elements.
      * @param elements The control elements.
-     * @param props The component props.
      */
     private static _spreadMillisAcrossUnitElements(
         millis: number,
-        elements: DurationControlElement[],
-        props: DurationControlProps
+        elements: DurationControlElement[]
     ): void {
         // A function to get the unit element with the specified duration unit type.
         const getUnitElement = (type: DurationUnitType) =>
@@ -480,11 +459,8 @@ export class DurationControl extends React.Component<
                 // Get the truncated unit value.
                 let truncatedUnitValue = Math.trunc(unitValue);
 
-                // Get the max value for this unit type.
-                const { max } = this._getUnitPropValues(unitType, props);
-
                 // Restrict truncatedUnitValue to the max value for the current unit.
-                truncatedUnitValue = Math.min(truncatedUnitValue, max);
+                truncatedUnitValue = Math.min(truncatedUnitValue, unitElement.max);
 
                 // Apply the unit value.
                 unitElement.value = truncatedUnitValue;
@@ -529,12 +505,12 @@ export class DurationControl extends React.Component<
     }
 
     /**
-     * Parse an array of duration control elements, either strings or unit input definitions, from the given pattern.
-     * @param pattern The patterp to parse the elments from.
+     * Parse an array of duration control elements, either strings or unit input definitions, from the given props.
+     * @param props The component props.
      * @returns An array of duration control elements, either strings or unit input definitions.
      */
-    private static _parseElementsFromPattern(
-        pattern: string
+    private static _parseElementsFromProps(
+        props: DurationControlProps
     ): DurationControlElement[] {
         const patternRegex = /(\{d+\}|\{h+\}|\{m+\}|\{s+\}|\{f+\})/g;
         const dayUnitRegex = /^{(d+)}$/g;
@@ -543,19 +519,34 @@ export class DurationControl extends React.Component<
         const secondUnitRegex = /^{(s+)}$/g;
         const millisecondUnitRegex = /^{(f+)}$/g;
 
-        const elements = pattern
+        const getMaxAndStepValue = (unitType: DurationUnitType, characters: number) => {
+            // Get the max and step value for this unit type.
+            const { step, max } = DurationControl._getUnitPropValues(unitType, props);
+
+            // Our unit max will be the smallest between the explicitly defined unit max and the max value allowed for the character count.
+            return {
+                max: Math.min(Math.pow(10, characters) - 1, max),
+                step
+            };
+        };
+
+        const elements = props.pattern
             .split(patternRegex)
             .reduce<DurationControlElement[]>((previous, current) => {
                 if (!current) {
                     return previous;
                 }
 
+                // Get the number of characters for the unit.
+                const characters = current.length - 2;
+
                 if (current.match(dayUnitRegex)) {
                     return [
                         ...previous,
                         {
                             type: "day",
-                            characters: current.length - 2,
+                            characters,
+                            ...getMaxAndStepValue("day", characters),
                             value: 0
                         }
                     ];
@@ -564,7 +555,8 @@ export class DurationControl extends React.Component<
                         ...previous,
                         {
                             type: "hour",
-                            characters: current.length - 2,
+                            characters,
+                            ...getMaxAndStepValue("hour", characters),
                             value: 0
                         }
                     ];
@@ -573,7 +565,8 @@ export class DurationControl extends React.Component<
                         ...previous,
                         {
                             type: "minute",
-                            characters: current.length - 2,
+                            characters,
+                            ...getMaxAndStepValue("minute", characters),
                             value: 0
                         }
                     ];
@@ -582,7 +575,8 @@ export class DurationControl extends React.Component<
                         ...previous,
                         {
                             type: "second",
-                            characters: current.length - 2,
+                            characters,
+                            ...getMaxAndStepValue("second", characters),
                             value: 0
                         }
                     ];
@@ -591,7 +585,8 @@ export class DurationControl extends React.Component<
                         ...previous,
                         {
                             type: "millisecond",
-                            characters: current.length - 2,
+                            characters,
+                            ...getMaxAndStepValue("millisecond", characters),
                             value: 0
                         }
                     ];
@@ -600,8 +595,12 @@ export class DurationControl extends React.Component<
                 return [...previous, current];
             }, []);
 
-        // TODO Double check that we don't have duplicate unit types.
-        // ["day","hour","minute","second","millisecond"].forEach((unit) => {});
+        // Double check that we don't have duplicate unit types.
+        ["day", "hour", "minute", "second", "millisecond"].forEach((unit) => {
+            if (elements.filter((element) => typeof element !== "string" && element.type === unit).length > 1) {
+                throw new Error(`cannot have duplicate unit types in pattern (${unit})`);
+            }
+        });
 
         return elements;
     }

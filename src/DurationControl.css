@@ -12,6 +12,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    height: 21px;
     padding: 5px;
     border: 1px rgb(120, 120, 120) solid;
     border-radius: 3px;
@@ -24,6 +25,7 @@
 .react-duration-control > .control-wrapper > .elements-container {
     display: flex;
     flex-direction: row;
+    font-family: Arial, sans-serif;
     padding: 0px 6px;
 }
 
@@ -43,7 +45,7 @@
     display: inline-flex;
     align-items: center;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .duration-control-inline-text {
@@ -65,4 +67,5 @@
     cursor: pointer;
     padding: 0px;
     line-height: 50%;
+    margin: 0;
 }

@@ -1,49 +1,61 @@
 {
   "name": "react-duration-control",
   "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.2.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.0",
-    "@types/node": "^16.11.33",
-    "@types/react": "^18.0.8",
-    "@types/react-dom": "^18.0.3",
+  "description": "A time duration input component that allows the user to define a duration in days, hours, minutes, seconds and milliseconds",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikkorn/react-duration-control.git"
+  },
+  "keywords": [
+    "react",
+    "component",
+    "duration",
+    "time",
+    "input",
+    "control",
+    "react",
+    "component",
+    "day",
+    "hour",
+    "minute",
+    "second",
+    "millisecond"
+  ],
+  "author": "nikolas howard",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nikkorn/react-duration-control/issues"
+  },
+  "homepage": "https://github.com/nikkorn/react-duration-control#readme",
+  "devDependencies": {
+    "@babel/core": "^7.18.2",
+    "@storybook/addon-actions": "^6.5.5",
+    "@storybook/addon-essentials": "^6.5.5",
+    "@storybook/addon-interactions": "^6.5.5",
+    "@storybook/addon-links": "^6.5.5",
+    "@storybook/builder-webpack4": "^6.5.5",
+    "@storybook/manager-webpack4": "^6.5.5",
+    "@storybook/react": "^6.5.5",
+    "@storybook/testing-library": "0.0.11",
+    "babel-loader": "^8.2.5",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
-    "react-duration": "^1.0.8",
-    "react-scripts": "5.0.1",
-    "react-time-duration-input": "^1.1.1",
-    "typescript": "^4.6.4",
-    "web-vitals": "^2.1.4"
+    "rollup": "^2.75.3",
+    "rollup-plugin-import-css": "^3.0.3",
+    "rollup-plugin-typescript2": "^0.31.2",
+    "tslib": "^2.4.0",
+    "typescript": "^4.7.2"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "format": "prettier --write \"src/**\""
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "prettier": "^2.6.2"
-  }
+  "dependencies": {}
 }
