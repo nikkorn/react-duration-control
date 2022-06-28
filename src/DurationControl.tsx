@@ -209,7 +209,8 @@ export class DurationControl extends React.Component<
     public render(): React.ReactNode {
         return (
             <div className={this._controlClassName}>
-                <div className="control-wrapper">
+                <fieldset className="control-wrapper">
+                    <legend>Duration</legend>
                     <div className="elements-container">
                         {this.state.elements.map((element, index) =>
                             typeof element === "string" ? (
@@ -268,7 +269,7 @@ export class DurationControl extends React.Component<
                             disabled={this.props.disabled}
                         />
                     )}
-                </div>
+                </fieldset>
             </div>
         );
     }

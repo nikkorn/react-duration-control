@@ -1,5 +1,6 @@
 .react-duration-control {
     display: inline-block;
+    font-family: Arial, sans-serif;
     border-radius: 3px;
     background-color: rgb(255, 255, 255);
 }
@@ -26,7 +27,6 @@
 .react-duration-control > .control-wrapper > .elements-container {
     display: flex;
     flex-direction: row;
-    font-family: Arial, sans-serif;
     padding: 0px 6px;
 }
 
