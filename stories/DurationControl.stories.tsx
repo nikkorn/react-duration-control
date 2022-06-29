@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import { DurationControl } from '../src/DurationControl';
 
-const DurationControlWrapper = ({ pattern, disabled, hideSpinner }) => {
+const DurationControlWrapper = ({ pattern, disabled, hideSpinner, label }) => {
   const [millis, setMillis] = useState(0);
 
   return (
@@ -12,6 +12,7 @@ const DurationControlWrapper = ({ pattern, disabled, hideSpinner }) => {
             disabled={disabled}
             hideSpinner={hideSpinner}
             pattern={pattern}
+            label={label}
             value={millis}
             onChange={(value) => setMillis(value)}
         />
@@ -39,5 +40,6 @@ export const AllUnits = Template.bind({});
 AllUnits.args = {
   pattern: "Days {dd} Hours {hh} Minutes {mm} Seconds {ss} Millis {fff}",
   disabled: false,
-  hideSpinner: false
+  hideSpinner: false,
+  label: ""
 };

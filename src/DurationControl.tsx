@@ -36,6 +36,9 @@ export type DurationControlProps = {
     /** The change handler that is called whenever the control value changes. */
     onChange: (milliseconds: number) => void;
 
+    /** The control label. */
+    label?: string;
+
     /** A flag indicating whether the control is disabled. */
     disabled?: boolean;
 
@@ -209,8 +212,8 @@ export class DurationControl extends React.Component<
     public render(): React.ReactNode {
         return (
             <div className={this._controlClassName}>
-                <fieldset className="control-wrapper">
-                    <legend>Duration</legend>
+                <fieldset className="control-fieldset">
+                    {this.props.label && <legend className="control-label">{this.props.label}</legend>}
                     <div className="elements-container">
                         {this.state.elements.map((element, index) =>
                             typeof element === "string" ? (
