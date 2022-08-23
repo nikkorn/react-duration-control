@@ -15,7 +15,8 @@
     justify-content: space-between;
     box-sizing: content-box;
     height: fit-content;
-    padding: 5px;
+    padding: 4px;
+    margin: 0px;
     border: 1px rgb(120, 120, 120) solid;
     border-radius: 3px;
 }
