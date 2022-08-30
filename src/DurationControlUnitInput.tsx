@@ -20,14 +20,19 @@ export type DurationControlUnitInputProps = {
     /** The character length of the unit input. */
     characterLength: number;
 
+    /** The unit value. */
     value: number | null;
 
+    /** The 'onChange' handler. */
     onChange: (value: number | null) => void;
 
+    /** The 'onUpArrowKeyPress' handler. */
     onUpArrowKeyPress: () => void;
 
+    /** The 'onDownArrowKeyPress' handler. */
     onDownArrowKeyPress: () => void;
 
+    /** The 'onFocus' handler. */
     onFocus: () => void;
 
     /** A flag indicating whether the unit input is disabled. */
@@ -52,6 +57,7 @@ export const DurationControlUnitInput: React.FunctionComponent<
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [focused, setFocused] = React.useState(false);
 
+    // A helper function to get the raw value if the unit has focus or our value padded with zeros if it doesn't.
     const getValue = (): string | number => {
         // If our value is null then the input should just be empty.
         if (value === null) {
@@ -66,7 +72,7 @@ export const DurationControlUnitInput: React.FunctionComponent<
     if (!focused || disabled) {
         return (
             <span
-                className="duration-control-unit-text"
+                className="react-duration-control-unit-text"
                 onClick={() => {
                     if (!disabled) {
                         setFocused(true);

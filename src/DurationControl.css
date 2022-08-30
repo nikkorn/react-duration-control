@@ -9,36 +9,37 @@
     background-color: rgb(240, 240, 240);
 }
 
-.react-duration-control > .control-fieldset {
+.react-duration-control-fieldset {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     box-sizing: content-box;
     height: fit-content;
-    padding: 4px;
+    padding: 5px;
     margin: 0px;
     border: 1px rgb(120, 120, 120) solid;
     border-radius: 3px;
 }
 
-.react-duration-control > .control-fieldset > .control-label {
-    font-size: 0.8em;
-    margin-bottom: -6px;
-}
-
-.react-duration-control.disabled > .control-fieldset {
+.react-duration-control.disabled > .react-duration-control-fieldset {
     border: 1px rgb(160, 160, 160) solid;
 }
 
-.react-duration-control > .control-fieldset > .elements-container {
+.react-duration-control-elements-container {
     display: flex;
     flex-direction: row;
     min-height: 21px;
     padding: 2px 6px;
+    overflow: hidden;
 }
 
-.react-duration-control.disabled > .control-fieldset > .elements-container {
+.react-duration-control.disabled > .react-duration-control-fieldset > .react-duration-control-elements-container {
     opacity: 0.7;
+}
+
+.react-duration-control-label {
+    font-size: 0.8em;
+    margin-bottom: -6px;
 }
 
 .duration-control-unit-input-wrapper {
@@ -49,14 +50,14 @@
     outline-width: 0;
 }
 
-.duration-control-unit-text {
+.react-duration-control-unit-text {
     display: inline-flex;
     align-items: center;
     cursor: pointer;
     font-weight: 600;
 }
 
-.duration-control-inline-text {
+.react-duration-control-inline-text {
     display: inline-flex;
     align-items: center;
     white-space: pre;
@@ -68,7 +69,8 @@
     flex-direction: column;
     justify-content: center;
     width: 20px;
-    margin: 0px 2px;
+    margin-inline-start: 6px;
+    margin-inline-end: 2px;
     border-radius: 3px;
 }
 

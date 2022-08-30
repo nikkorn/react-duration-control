@@ -212,9 +212,9 @@ export class DurationControl extends React.Component<
     public render(): React.ReactNode {
         return (
             <div className={this._controlClassName}>
-                <fieldset className="control-fieldset">
-                    {this.props.label && <legend className="control-label">{this.props.label}</legend>}
-                    <div className="elements-container">
+                <fieldset className="react-duration-control-fieldset">
+                    {this.props.label && <legend className="react-duration-control-label">{this.props.label}</legend>}
+                    <div className="react-duration-control-elements-container">
                         {this.state.elements.map((element, index) =>
                             typeof element === "string" ? (
                                 <DurationControlInlineText
