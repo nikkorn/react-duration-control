@@ -54,14 +54,13 @@
     display: inline-flex;
     align-items: center;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: bolder;
 }
 
 .react-duration-control-inline-text {
     display: inline-flex;
     align-items: center;
     white-space: pre;
-    font-weight: 300;
 }
 
 .spinner-button-container {
