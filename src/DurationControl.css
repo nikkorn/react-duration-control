@@ -14,8 +14,9 @@
     flex-direction: row;
     justify-content: space-between;
     box-sizing: content-box;
-    height: 21px;
+    height: fit-content;
     padding: 5px;
+    margin: 0px;
     border: 1px rgb(120, 120, 120) solid;
     border-radius: 3px;
 }
