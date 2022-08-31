@@ -1,5 +1,7 @@
 # react-duration-control
 
+[![npm version](https://badge.fury.io/js/react-duration-control.svg)](https://badge.fury.io/js/react-duration-control)
+
 ![image info](./resources/images/basic-control.png)
 
 A time duration input component that allows the user to define a duration in days, hours, minutes, seconds and milliseconds. 
