@@ -4,7 +4,9 @@
 
 ![image info](./resources/images/basic-control.png)
 
-A time duration input component that allows the user to define a duration in days, hours, minutes, seconds and milliseconds. 
+A time duration input component that allows the user to define a duration in days, hours, minutes, seconds and milliseconds.
+
+A demo can be found [HERE](https://nikkorn.github.io/react-duration-control/)
 
 ## Install
 
