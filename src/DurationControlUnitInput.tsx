@@ -35,6 +35,9 @@ export type DurationControlUnitInputProps = {
     /** The 'onFocus' handler. */
     onFocus: () => void;
 
+    /** The 'onBlur' handler. */
+    onBlur: () => void;
+
     /** A flag indicating whether the unit input is disabled. */
     disabled: boolean | undefined;
 };
@@ -52,6 +55,7 @@ export const DurationControlUnitInput: React.FunctionComponent<
     onUpArrowKeyPress,
     onDownArrowKeyPress,
     onFocus,
+    onBlur,
     disabled
 }) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -106,6 +110,7 @@ export const DurationControlUnitInput: React.FunctionComponent<
                 }}
                 onBlur={(event) => {
                     setFocused(false);
+                    onBlur();
 
                     // If focus leaves our input and it is empty then we should reset the input value to zero.
                     if (!event.target.value) {
@@ -120,6 +125,7 @@ export const DurationControlUnitInput: React.FunctionComponent<
 
                     if (event.key === "Enter") {
                         setFocused(false);
+                        onBlur();
 
                         // If focus leaves our input and it is empty then we should reset the input value to zero.
                         if (!inputRef.current || !inputRef.current.value) {

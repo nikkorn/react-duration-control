@@ -16,30 +16,41 @@
     box-sizing: content-box;
     height: fit-content;
     padding: 5px;
-    margin: 0px;
-    border: 1px rgb(120, 120, 120) solid;
+    border: 1px rgb(0, 0, 0, 0.4) solid;
     border-radius: 3px;
 }
 
+.react-duration-control.focused > .react-duration-control-fieldset {
+    padding: 4px;
+    border: 2px rgba(0, 160, 255) solid;
+}
+
+.react-duration-control.focused > .react-duration-control-fieldset > .react-duration-control-label {
+    margin-bottom: -5px;
+    color: rgba(0, 160, 255);
+}
+
 .react-duration-control.disabled > .react-duration-control-fieldset {
-    border: 1px rgb(160, 160, 160) solid;
+    border: 1px rgb(0, 0, 0, 0.2) solid;
+}
+
+.react-duration-control-label {
+    font-size: 0.8em;
+    margin-bottom: -6px;
+    padding: 0px 5px;
+    color: rgb(0, 0, 0, 0.5);
 }
 
 .react-duration-control-elements-container {
     display: flex;
     flex-direction: row;
     min-height: 21px;
-    padding: 2px 6px;
+    padding: 4px 8px;
     overflow: hidden;
 }
 
 .react-duration-control.disabled > .react-duration-control-fieldset > .react-duration-control-elements-container {
     opacity: 0.7;
-}
-
-.react-duration-control-label {
-    font-size: 0.8em;
-    margin-bottom: -6px;
 }
 
 .duration-control-unit-input-wrapper {

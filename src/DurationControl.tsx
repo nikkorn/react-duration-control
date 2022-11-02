@@ -91,6 +91,9 @@ export type DurationControlState = {
 
     /** The last unit input to have focus. */
     lastFocusedInputUnitType: DurationUnitType | null;
+
+    /** A flag indicating whether the control has focus. */
+    focused: boolean;
 };
 
 /**
@@ -149,11 +152,13 @@ export class DurationControl extends React.Component<
             pattern,
             elements,
             milliseconds: value,
-            lastFocusedInputUnitType
+            lastFocusedInputUnitType,
+            focused: false
         };
 
         this._updateUnitValue = this._updateUnitValue.bind(this);
         this._onUnitInputFocus = this._onUnitInputFocus.bind(this);
+        this._onUnitInputBlur = this._onUnitInputBlur.bind(this);
         this._incrementOrDecrementUnitValue =
             this._incrementOrDecrementUnitValue.bind(this);
     }
@@ -168,6 +173,10 @@ export class DurationControl extends React.Component<
 
         if (this.props.disabled) {
             classes.push("disabled");
+        }
+
+        if (this.state.focused) {
+            classes.push("focused");
         }
 
         return classes.join(" ");
@@ -247,6 +256,9 @@ export class DurationControl extends React.Component<
                                     }
                                     onFocus={() =>
                                         this._onUnitInputFocus(element.type)
+                                    }
+                                    onBlur={() =>
+                                        this._onUnitInputBlur()
                                     }
                                     disabled={this.props.disabled}
                                 />
@@ -339,7 +351,17 @@ export class DurationControl extends React.Component<
      * @param type The focused unit input type.
      */
     private _onUnitInputFocus(type: DurationUnitType): void {
-        this.setState({ lastFocusedInputUnitType: type });
+        this.setState({ 
+            lastFocusedInputUnitType: type,
+            focused: true
+        });
+    }
+
+    /**
+     * Handles a unit input element getting blur.
+     */
+    private _onUnitInputBlur(): void {
+        this.setState({ focused: false });
     }
 
     /**
