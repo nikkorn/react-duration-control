@@ -16,17 +16,21 @@ export const Spinner: React.FunctionComponent<SpinnerProps> = ({
 	return (
 		<div className="spinner-button-container">
 			<button
+				tabIndex={-1}
 				type="button"
 				disabled={disabled}
 				className="spinner-button spinner-button-up"
-				onClick={() => onUpButtonPress()}>
+				onClick={() => onUpButtonPress()}
+			>
 				▴
 			</button>
 			<button
+				tabIndex={-1}
 				type="button"
 				disabled={disabled}
 				className="spinner-button spinner-button-down"
-				onClick={() => onDownButtonPress()}>
+				onClick={() => onDownButtonPress()}
+			>
 				▾
 			</button>
 		</div>
