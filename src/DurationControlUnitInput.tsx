@@ -65,24 +65,6 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
 		return focused ? value : String(value).padStart(characterLength, "0");
 	};
 
-	// If the unit does not currently have focus then we display the unit value as a span and not an input.
-	if (!focused || disabled) {
-		return (
-			<span
-				tabIndex={0}
-				className="react-duration-control-unit-text"
-				onFocus={() => {
-					if (!disabled) {
-						setFocused(true);
-						onFocus();
-					}
-				}}
-			>
-				{getValue()}
-			</span>
-		);
-	}
-
 	return (
 		<div className={`duration-control-unit-input-wrapper ${type}`}>
 			<input
@@ -100,6 +82,12 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
 					// Only call our 'onChange' callback if our value is actually a valid number.
 					if (!Number.isNaN(Number(event.target.value))) {
 						onChange(parseInt(event.target.value, 10));
+					}
+				}}
+				onFocus={() => {
+					if (!disabled) {
+						setFocused(true);
+						onFocus();
 					}
 				}}
 				onBlur={(event) => {
@@ -135,7 +123,9 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
 						onDownArrowKeyPress();
 					}
 				}}
-				className={`duration-control-unit-input ${type}`}
+				className={`duration-control-unit-input ${type} ${
+					focused ? "" : "react-duration-control-unit-text"
+				}`}
 				maxLength={characterLength}
 				style={{ width: `${characterLength}ch` }}
 			></input>

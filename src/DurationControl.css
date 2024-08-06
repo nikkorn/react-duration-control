@@ -1,105 +1,106 @@
 .react-duration-control {
-    display: inline-block;
-    font-family: Arial, sans-serif;
-    border-radius: 3px;
-    background-color: rgb(255, 255, 255);
+  display: inline-block;
+  font-family: Arial, sans-serif;
+  border-radius: 3px;
+  background-color: rgb(255, 255, 255);
 }
 
 .react-duration-control.disabled {
-    background-color: rgb(240, 240, 240);
+  background-color: rgb(240, 240, 240);
 }
 
 .react-duration-control-fieldset {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    box-sizing: content-box;
-    height: fit-content;
-    padding: 5px;
-    border: 1px rgb(0, 0, 0, 0.4) solid;
-    border-radius: 3px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  box-sizing: content-box;
+  height: fit-content;
+  padding: 5px;
+  border: 1px rgb(0, 0, 0, 0.4) solid;
+  border-radius: 3px;
 }
 
 .react-duration-control.focused > .react-duration-control-fieldset {
-    padding: 4px;
-    border: 2px rgba(0, 160, 255) solid;
+  padding: 4px;
+  border: 2px rgba(0, 160, 255) solid;
 }
 
 .react-duration-control.focused > .react-duration-control-fieldset > .react-duration-control-label {
-    margin-bottom: -5px;
-    color: rgba(0, 160, 255);
+  margin-bottom: -5px;
+  color: rgba(0, 160, 255);
 }
 
 .react-duration-control.disabled > .react-duration-control-fieldset {
-    border: 1px rgb(0, 0, 0, 0.2) solid;
+  border: 1px rgb(0, 0, 0, 0.2) solid;
 }
 
 .react-duration-control-label {
-    font-size: 0.8em;
-    margin-bottom: -6px;
-    padding: 0px 5px;
-    color: rgb(0, 0, 0, 0.5);
+  font-size: 0.8em;
+  margin-bottom: -6px;
+  padding: 0px 5px;
+  color: rgb(0, 0, 0, 0.5);
 }
 
 .react-duration-control-elements-container {
-    display: flex;
-    flex-direction: row;
-    min-height: 21px;
-    padding: 4px 8px;
-    overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  min-height: 21px;
+  padding: 4px 8px;
+  overflow: hidden;
 }
 
-.react-duration-control.disabled > .react-duration-control-fieldset > .react-duration-control-elements-container {
-    opacity: 0.7;
+.react-duration-control.disabled
+  > .react-duration-control-fieldset
+  > .react-duration-control-elements-container {
+  opacity: 0.7;
 }
 
 .duration-control-unit-input-wrapper {
-    display: flex;
+  display: flex;
 }
 
 .duration-control-unit-input:focus {
-    outline-width: 0;
+  outline-width: 0;
 }
 
 .react-duration-control-unit-text {
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-    font-weight: bolder;
+  cursor: pointer;
+  font-weight: bolder;
+  border: none;
 }
 
 .react-duration-control-inline-text {
-    display: inline-flex;
-    align-items: center;
-    white-space: pre;
+  display: inline-flex;
+  align-items: center;
+  white-space: pre;
 }
 
 .spinner-button-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 20px;
-    margin-inline-start: 6px;
-    margin-inline-end: 2px;
-    border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 20px;
+  margin-inline-start: 6px;
+  margin-inline-end: 2px;
+  border-radius: 3px;
 }
 
 .spinner-button-container > .spinner-button {
-    flex-grow: 1;
-    cursor: pointer;
-    padding: 0px;
-    line-height: 50%;
-    margin: 0;
-    border: 1px rgb(160, 160, 160) solid;
+  flex-grow: 1;
+  cursor: pointer;
+  padding: 0px;
+  line-height: 50%;
+  margin: 0;
+  border: 1px rgb(160, 160, 160) solid;
 }
 
 .spinner-button-container > .spinner-button-up {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }
 
 .spinner-button-container > .spinner-button-down {
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-    border-top: none;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-top: none;
 }
