@@ -42,7 +42,7 @@ const Template: ComponentStory<typeof DurationControlWrapper> = (args) => (
 
 export const AllUnits = Template.bind({});
 AllUnits.args = {
-	pattern: "Days {dd} Hours {hh} Minutes {mm} Seconds {ss} Millis {fff}",
+	pattern: "Days {dd} Hours {hh} Minutes {mm} Seconds {ss} Millis {ff}",
 	disabled: false,
 	hideSpinner: false,
 	label: ""
