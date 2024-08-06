@@ -123,9 +123,7 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
 						onDownArrowKeyPress();
 					}
 				}}
-				className={`duration-control-unit-input ${type} ${
-					focused ? "" : "react-duration-control-unit-text"
-				}`}
+				className={`duration-control-unit-input ${type} ${focused ? "" : "unfocused"}`}
 				maxLength={characterLength}
 				style={{ width: `${characterLength}ch` }}
 			></input>

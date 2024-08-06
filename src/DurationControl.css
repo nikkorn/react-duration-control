@@ -63,10 +63,12 @@
   outline-width: 0;
 }
 
-.react-duration-control-unit-text {
+.duration-control-unit-input.unfocused {
   cursor: pointer;
   font-weight: bolder;
   border: none;
+  font-size: 1em;
+  padding: 0;
 }
 
 .react-duration-control-inline-text {
