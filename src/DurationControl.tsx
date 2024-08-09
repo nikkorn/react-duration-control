@@ -9,7 +9,7 @@ import { clamp } from "./Utilities";
 
 type DurationControlUnit = {
 	type: DurationUnitType;
-	characters: number;
+	characters: number | undefined;
 	step: number;
 	max: number;
 	value: number | null;
@@ -485,20 +485,22 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 	 * @returns An array of duration control elements, either strings or unit input definitions.
 	 */
 	private static _parseElementsFromProps(props: DurationControlProps): DurationControlElement[] {
-		const patternRegex = /(\{d+\}|\{h+\}|\{m+\}|\{s+\}|\{f+\})/g;
-		const dayUnitRegex = /^{(d+)}$/g;
-		const hourUnitRegex = /^{(h+)}$/g;
-		const minuteUnitRegex = /^{(m+)}$/g;
-		const secondUnitRegex = /^{(s+)}$/g;
-		const millisecondUnitRegex = /^{(f+)}$/g;
+		const patternRegex = /(\{[dhmsf]+\*?\})/g;
+		const asteriskRegex = /\*/;
+		const dayUnitRegex = /^\{d+\*?\}$/g;
+		const hourUnitRegex = /^\{h+\*?\}$/g;
+		const minuteUnitRegex = /^\{m+\*?\}$/g;
+		const secondUnitRegex = /^\{s+\*?\}$/g;
+		const millisecondUnitRegex = /^\{f+\*?\}$/g;
 
-		const getMaxAndStepValue = (unitType: DurationUnitType, characters: number) => {
+		const getMaxAndStepValue = (unitType: DurationUnitType, characters: number | undefined) => {
 			// Get the max and step value for this unit type.
 			const { step, max } = DurationControl._getUnitPropValues(unitType, props);
 
-			// Our unit max will be the smallest between the explicitly defined unit max and the max value allowed for the character count.
+			// If pattern has an asterisk, characters are undefined so any numbers of digits are allowed so the unit max will be the explicitly defined unit max, if no defined it defaults to the JS safe integer.
+			// If pattern has no an asterisk, characters are defined, the unit max will be the smallest between the explicitly defined unit max and the max value allowed for the character count.
 			return {
-				max: Math.min(Math.pow(10, characters) - 1, max),
+				max: characters == undefined ? max : Math.min(Math.pow(10, characters) - 1, max),
 				step
 			};
 		};
@@ -510,8 +512,10 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 					return previous;
 				}
 
+				// If pattern has an asterisk, any numbers of digits are allowed
+				const isAnyMaxNumberAllowed = asteriskRegex.test(current);
 				// Get the number of characters for the unit.
-				const characters = current.length - 2;
+				const characters = isAnyMaxNumberAllowed ? undefined : current.length - 2;
 
 				if (current.match(dayUnitRegex)) {
 					return [
