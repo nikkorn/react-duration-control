@@ -53,13 +53,6 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
 }) => {
 	const inputRef = React.useRef<HTMLInputElement>(null);
 	const [focused, setFocused] = React.useState(false);
-	const [width, setWidth] = React.useState<number | undefined>(1);
-
-	React.useEffect(() => {
-		value !== null && characterLength == undefined
-			? setWidth(value.toString().length)
-			: setWidth(characterLength);
-	}, [value, characterLength]);
 
 	// A helper function to get the raw value if the unit has focus or our value padded with zeros if it doesn't.
 	const getValue = (): string | number => {
@@ -69,12 +62,9 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
 		}
 
 		// If our field is focused then we want to show the raw value. If it isn't then we want our padded value.
-		return focused
+		return focused || characterLength === undefined
 			? value
-			: String(value).padStart(
-					characterLength == undefined ? value.toString.length : characterLength,
-					"0"
-			  );
+			: String(value).padStart(characterLength, "0");
 	};
 
 	return (
@@ -136,7 +126,11 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
 				}}
 				className={`duration-control-unit-input ${type} ${focused ? "" : "unfocused"}`}
 				maxLength={characterLength}
-				style={{ width: `${width ? width : 1}ch` }}
+				style={{
+					width: `${
+						characterLength !== undefined ? characterLength : value?.toString().length ?? 1
+					}ch`
+				}}
 			></input>
 		</div>
 	);

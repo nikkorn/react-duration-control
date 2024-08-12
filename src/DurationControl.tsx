@@ -485,13 +485,14 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 	 * @returns An array of duration control elements, either strings or unit input definitions.
 	 */
 	private static _parseElementsFromProps(props: DurationControlProps): DurationControlElement[] {
-		const patternRegex = /(\{[dhmsf]+\*?\})/g;
 		const asteriskRegex = /\*/;
-		const dayUnitRegex = /^\{d+\*?\}$/g;
-		const hourUnitRegex = /^\{h+\*?\}$/g;
-		const minuteUnitRegex = /^\{m+\*?\}$/g;
-		const secondUnitRegex = /^\{s+\*?\}$/g;
-		const millisecondUnitRegex = /^\{f+\*?\}$/g;
+		const patternRegex =
+			/(\{d+\}|\{h+\}|\{m+\}|\{s+\}|\{f+\}|\{d\*\}|\{h\*\}|\{m\*\}|\{s\*\}|\{f\*\})/g;
+		const dayUnitRegex = /^{d+}$|^{d\*\}$/g;
+		const hourUnitRegex = /^{h+}$|^{h\*\}$/g;
+		const minuteUnitRegex = /^{m+}$|^{m\*\}$/g;
+		const secondUnitRegex = /^{s+}$|^{s\*\}$/g;
+		const millisecondUnitRegex = /^{f+}$|^{f\*\}$/g;
 
 		const getMaxAndStepValue = (unitType: DurationUnitType, characters: number | undefined) => {
 			// Get the max and step value for this unit type.
@@ -500,7 +501,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 			// If pattern has an asterisk, characters are undefined so any numbers of digits are allowed so the unit max will be the explicitly defined unit max, if no defined it defaults to the JS safe integer.
 			// If pattern has no an asterisk, characters are defined, the unit max will be the smallest between the explicitly defined unit max and the max value allowed for the character count.
 			return {
-				max: characters == undefined ? max : Math.min(Math.pow(10, characters) - 1, max),
+				max: characters === undefined ? max : Math.min(Math.pow(10, characters) - 1, max),
 				step
 			};
 		};
@@ -512,10 +513,9 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 					return previous;
 				}
 
-				// If pattern has an asterisk, any numbers of digits are allowed
-				const isAnyMaxNumberAllowed = asteriskRegex.test(current);
 				// Get the number of characters for the unit.
-				const characters = isAnyMaxNumberAllowed ? undefined : current.length - 2;
+				// If pattern has an asterisk, any numbers of digits are allowed.
+				const characters = asteriskRegex.test(current) ? undefined : current.length - 2;
 
 				if (current.match(dayUnitRegex)) {
 					return [
