@@ -3,7 +3,13 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 
 import { DurationControl } from "../src/DurationControl";
 
-const DurationControlWrapper = ({ pattern, disabled, hideSpinner, label }) => {
+const DurationControlWrapper = ({
+	pattern,
+	disabled,
+	hideSpinner,
+	label,
+	isRolloverUnitValues
+}) => {
 	const [millis, setMillis] = useState(0);
 
 	return (
@@ -17,6 +23,7 @@ const DurationControlWrapper = ({ pattern, disabled, hideSpinner, label }) => {
 				onChange={(value) => setMillis(value)}
 				onUnitFocus={(unit) => console.log("Focus", unit)}
 				onUnitBlur={(unit) => console.log("Blur", unit)}
+				isRolloverUnitValues={isRolloverUnitValues}
 			/>
 			<h3>Millis</h3>
 			<input
@@ -45,5 +52,6 @@ AllUnits.args = {
 	pattern: "Days {dd} Hours {hh} Minutes {mm} Seconds {ss} Millis {ff}",
 	disabled: false,
 	hideSpinner: false,
-	label: ""
+	label: "",
+	isRolloverUnitValues: false
 };

@@ -77,6 +77,14 @@ export type DurationControlProps = {
 
 	/** The amount to increment/decrement the millisecond unit value by when an up/down arrow key or spinner button is pressed. Defaults to 1. */
 	fStep?: number;
+
+	/**
+	 * If enable, it allows unit values (e.g., minutes, hours) to roll over to the next higher unit.
+	 * For example:
+	 * - Typing 59 into the minutes field and incrementing by 1 will reset the minutes to 0 and increment the hours by 1.
+	 * - Typing 65 into the minutes field will reset the minutes to 5 and increment the hours by 1.
+	 */
+	isRolloverUnitValues?: boolean;
 };
 
 /**
@@ -294,11 +302,20 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 
 		// Work out the difference between the new and previous unit values in millis.
 		const unitValueMillisDifference = newUnitValueMillis - previousUnitValueMillis;
-
 		const updatedMilliseconds = this.state.milliseconds + unitValueMillisDifference;
 
-		// Update the unit value.
-		unitElement.value = clampedValue;
+		if (this.props.isRolloverUnitValues) {
+			// Reset values and let spreadMillisAcrossUnitElements sort them out
+			elements
+				.filter((element) => typeof element !== "string")
+				.forEach((element: DurationControlUnit) => {
+					element.value = 0;
+				});
+			DurationControl._spreadMillisAcrossUnitElements(updatedMilliseconds, elements);
+		} else {
+			// Update the unit value.
+			unitElement.value = clampedValue;
+		}
 
 		this.setState({ elements, milliseconds: updatedMilliseconds });
 
