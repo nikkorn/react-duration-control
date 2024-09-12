@@ -13,7 +13,7 @@ export type DurationControlUnitInputProps = {
 	type: DurationUnitType;
 
 	/** The character length of the unit input. */
-	characterLength: number;
+	characterLength: number | undefined;
 
 	/** The unit value. */
 	value: number | null;
@@ -62,7 +62,9 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
 		}
 
 		// If our field is focused then we want to show the raw value. If it isn't then we want our padded value.
-		return focused ? value : String(value).padStart(characterLength, "0");
+		return focused || characterLength === undefined
+			? value
+			: String(value).padStart(characterLength, "0");
 	};
 
 	return (
@@ -124,7 +126,11 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
 				}}
 				className={`duration-control-unit-input ${type} ${focused ? "" : "unfocused"}`}
 				maxLength={characterLength}
-				style={{ width: `${characterLength}ch` }}
+				style={{
+					width: `${
+						characterLength !== undefined ? characterLength : value?.toString().length ?? 1
+					}ch`
+				}}
 			></input>
 		</div>
 	);
