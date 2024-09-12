@@ -1,6 +1,6 @@
 {
   "name": "react-duration-control",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A time duration input component that allows the user to define a duration in days, hours, minutes, seconds and milliseconds",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
