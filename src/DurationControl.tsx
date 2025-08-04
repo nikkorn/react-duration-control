@@ -48,6 +48,19 @@ export type DurationControlProps = {
 	/** A flag indicating whether to hide the control spinner. */
 	hideSpinner?: boolean;
 
+	/**
+	 * If enable, it allows unit values (e.g., minutes, hours) to roll over to the next higher unit.
+	 * For example:
+	 * - Typing 59 into the minutes field and incrementing by 1 will reset the minutes to 0 and increment the hours by 1.
+	 * - Typing 65 into the minutes field will reset the minutes to 5 and increment the hours by 1.
+	 */
+	rollover?: boolean;
+
+	/**
+	 * A flag indicating whether to render the control in a touch-friendly mode by making touch target areas larger.
+	 */
+	touchFriendly?: boolean;
+
 	/** The maximum value for the day unit. Defaults to Number.MAX_SAFE_INTEGER */
 	dMax?: number;
 
@@ -77,14 +90,6 @@ export type DurationControlProps = {
 
 	/** The amount to increment/decrement the millisecond unit value by when an up/down arrow key or spinner button is pressed. Defaults to 1. */
 	fStep?: number;
-
-	/**
-	 * If enable, it allows unit values (e.g., minutes, hours) to roll over to the next higher unit.
-	 * For example:
-	 * - Typing 59 into the minutes field and incrementing by 1 will reset the minutes to 0 and increment the hours by 1.
-	 * - Typing 65 into the minutes field will reset the minutes to 5 and increment the hours by 1.
-	 */
-	isRolloverUnitValues?: boolean;
 };
 
 /**
@@ -179,6 +184,10 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 
 		if (this.props.disabled) {
 			classes.push("disabled");
+		}
+
+		if (this.props.touchFriendly) {
+			classes.push("touch-friendly");
 		}
 
 		if (this.state.focused) {
@@ -304,7 +313,7 @@ export class DurationControl extends React.Component<DurationControlProps, Durat
 		const unitValueMillisDifference = newUnitValueMillis - previousUnitValueMillis;
 		const updatedMilliseconds = this.state.milliseconds + unitValueMillisDifference;
 
-		if (this.props.isRolloverUnitValues) {
+		if (this.props.rollover) {
 			// Reset values and let spreadMillisAcrossUnitElements sort them out
 			elements
 				.filter((element) => typeof element !== "string")

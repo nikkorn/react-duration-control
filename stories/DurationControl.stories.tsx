@@ -5,10 +5,11 @@ import { DurationControl } from "../src/DurationControl";
 
 const DurationControlWrapper = ({
 	pattern,
+	label,
 	disabled,
 	hideSpinner,
-	label,
-	isRolloverUnitValues
+	rollover,
+	touchFriendly
 }) => {
 	const [millis, setMillis] = useState(0);
 
@@ -16,14 +17,15 @@ const DurationControlWrapper = ({
 		<div>
 			<DurationControl
 				disabled={disabled}
+				rollover={rollover}
 				hideSpinner={hideSpinner}
+				touchFriendly={touchFriendly}
 				pattern={pattern}
 				label={label}
 				value={millis}
 				onChange={(value) => setMillis(value)}
 				onUnitFocus={(unit) => console.log("Focus", unit)}
 				onUnitBlur={(unit) => console.log("Blur", unit)}
-				isRolloverUnitValues={isRolloverUnitValues}
 			/>
 			<h3>Millis</h3>
 			<input
@@ -50,8 +52,9 @@ const Template: ComponentStory<typeof DurationControlWrapper> = (args) => (
 export const AllUnits = Template.bind({});
 AllUnits.args = {
 	pattern: "Days {dd} Hours {hh} Minutes {mm} Seconds {ss} Millis {ff}",
+	label: "",
 	disabled: false,
 	hideSpinner: false,
-	label: "",
-	isRolloverUnitValues: false
+	rollover: false,
+	touchFriendly: false
 };
