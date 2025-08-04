@@ -42,4 +42,5 @@ The backing value for the control is the number of milliseconds represented by t
 | label | string | | The control label content. |
 | disabled | bool | `false` | If `true`, the control will be disabled. |
 | hideSpinner | bool | `false` | If `true`, the up and down spinner buttons will not be shown. |
-| isRolloverUnitValues | bool    | `false` | If `true`, it allows unit values (e.g., minutes, hours) to roll over to the next higher unit. For example: <br/> - Typing 59 into the minutes field and incrementing by 1 will reset the minutes to 0 and increment the hours by 1. <br/> - Typing 65 into the minutes field will reset the minutes to 5 and increment the hours by 1. |
+| rollover | bool    | `false` | If `true`, it allows unit values (e.g., minutes, hours) to roll over to the next higher unit. For example: <br/> - Typing 59 into the minutes field and incrementing by 1 will reset the minutes to 0 and increment the hours by 1. <br/> - Typing 65 into the minutes field will reset the minutes to 5 and increment the hours by 1. |
+| touchFriendly | bool | `false` | If `true`, the control will be rendered in a touch-friendly mode where any touch target areas will be made larger. |

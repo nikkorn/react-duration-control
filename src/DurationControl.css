@@ -5,16 +5,13 @@
   background-color: rgb(255, 255, 255);
 }
 
-.react-duration-control.disabled {
-  background-color: rgb(240, 240, 240);
-}
-
 .react-duration-control-fieldset {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   box-sizing: content-box;
   height: fit-content;
+  min-inline-size: 0;
   padding: 5px;
   border: 1px rgb(0, 0, 0, 0.4) solid;
   border-radius: 3px;
@@ -32,31 +29,34 @@
 
 .react-duration-control.disabled > .react-duration-control-fieldset {
   border: 1px rgb(0, 0, 0, 0.2) solid;
+  pointer-events: none;
+
+  .react-duration-control-elements-container {
+    opacity: 0.5;
+  }
 }
 
 .react-duration-control-label {
   font-size: 0.8em;
   margin-bottom: -6px;
   padding: 0px 5px;
-  color: rgb(0, 0, 0, 0.5);
+  color: rgb(0, 0, 0, 0.6);
 }
 
 .react-duration-control-elements-container {
   display: flex;
   flex-direction: row;
   min-height: 21px;
-  padding: 4px 8px;
+  padding: 0px 8px;
   overflow: hidden;
-}
-
-.react-duration-control.disabled
-  > .react-duration-control-fieldset
-  > .react-duration-control-elements-container {
-  opacity: 0.7;
 }
 
 .duration-control-unit-input-wrapper {
   display: flex;
+}
+
+.duration-control-unit-input {
+  padding: 4px 2px;
 }
 
 .duration-control-unit-input:focus {
@@ -68,20 +68,20 @@
   font-weight: bolder;
   border: none;
   font-size: 1em;
-  padding: 0;
 }
 
 .react-duration-control-inline-text {
   display: inline-flex;
   align-items: center;
   white-space: pre;
+  padding: 4px 0px;
 }
 
 .spinner-button-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 20px;
+  min-inline-size: fit-content;
   margin-inline-start: 6px;
   margin-inline-end: 2px;
   border-radius: 3px;
@@ -92,6 +92,7 @@
   cursor: pointer;
   padding: 0px;
   line-height: 50%;
+  width: 24px;
   margin: 0;
   border: 1px rgb(160, 160, 160) solid;
 }
@@ -104,5 +105,29 @@
 .spinner-button-container > .spinner-button-down {
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
-  border-top: none;
+  border-top-width: 0px;
+}
+
+.react-duration-control.touch-friendly {
+  .duration-control-unit-input {
+    padding: 6px 4px;
+  }
+
+  .spinner-button-container {
+    flex-direction: row;
+
+    .spinner-button-up {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+      border-top-right-radius: 0px;
+    }
+
+    .spinner-button-down {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+      border-bottom-left-radius: 0px;
+      border-left-width: 0px;
+      border-top-width: 1px;
+    }
+  }
 }

@@ -72,6 +72,7 @@ export const DurationControlUnitInput: React.FunctionComponent<DurationControlUn
 			<input
 				ref={inputRef}
 				type="text"
+				inputMode="numeric"
 				value={getValue()}
 				onChange={(event) => {
 					// If our input is empty then the input value should be null.
